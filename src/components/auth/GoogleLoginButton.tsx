@@ -2,6 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 // Define a simple SVG for Google icon
 const GoogleIcon = () => (
@@ -14,24 +18,80 @@ const GoogleIcon = () => (
   </svg>
 );
 
+declare global {
+  interface Window {
+    google: any;
+  }
+}
 
 export function GoogleLoginButton() {
   const { toast } = useToast();
+  const { googleLogin } = useAuth();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleLogin = () => {
-    // Placeholder for Google login logic
-    // In a real app, this would initiate the OAuth flow
-    toast({
-      title: "Google Login",
-      description: "Google login is not implemented in this demo.",
-    });
-    console.log('Attempting Google login...');
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      // Initialize Google Sign-In
+      const google = window.google;
+      if (!google) {
+        throw new Error('Google Sign-In not loaded');
+      }
+
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (response: any) => {
+          try {
+            if (response.access_token) {
+              const user = await googleLogin(response.access_token);
+              if (user) {
+                toast({
+                  title: "Login Successful",
+                  description: `Welcome, ${user.name}!`,
+                });
+                router.push('/dashboard');
+              }
+            }
+          } catch (error: any) {
+            toast({
+              variant: "destructive",
+              title: "Google Login Failed",
+              description: error.message || "Failed to sign in with Google.",
+            });
+          } finally {
+            setIsLoading(false);
+          }
+        },
+      });
+
+      client.requestAccessToken();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Google Login Error",
+        description: error.message || "Failed to initialize Google Sign-In.",
+      });
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-      <GoogleIcon />
-      <span className="ml-2">Sign in with Google</span>
+    <Button 
+      variant="outline" 
+      className="w-full" 
+      onClick={handleGoogleLogin}
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : (
+        <GoogleIcon />
+      )}
+      <span className="ml-2">
+        {isLoading ? 'Signing in...' : 'Sign in with Google'}
+      </span>
     </Button>
   );
 }
