@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, UserCircle, LogOut, ShieldCheck, LayoutDashboard, ScanLine, UserPlus, LogInIcon } from 'lucide-react';
 import { Separator } from '../ui/separator';
 
@@ -70,7 +70,10 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
-                <div className="mb-6">
+                <SheetHeader>
+                  <SheetTitle>Navigation Menu</SheetTitle>
+                </SheetHeader>
+                <div className="mt-4 mb-6">
                   <Logo />
                 </div>
                 <Separator className="my-4" />

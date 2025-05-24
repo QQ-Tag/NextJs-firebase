@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, LinkOff, Loader2, Info, QrCode } from 'lucide-react';
+import { Trash2, Link2Off, Loader2, Info, QrCode } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -157,7 +157,7 @@ export function UserQrList() {
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="outline" size="sm" disabled={actionLoading[qr.id]}>
-                        {actionLoading[qr.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <LinkOff className="h-4 w-4" />}
+                        {actionLoading[qr.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2Off className="h-4 w-4" />}
                          <span className="ml-1 hidden sm:inline">Unlink</span>
                       </Button>
                     </AlertDialogTrigger>
