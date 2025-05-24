@@ -3,6 +3,7 @@
 import type { AuthUser, User } from '@/lib/types';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { users as mockUsers, ADMIN_CREDENTIALS } from '@/lib/mockData'; // For demo purposes
+import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   currentUser: AuthUser | null;
@@ -21,96 +22,108 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // Simulate checking for persisted login state (e.g., from localStorage)
     const storedUser = localStorage.getItem('currentUser');
-    const storedIsAdmin = localStorage.getItem('isAdmin');
-    if (storedUser) {
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
       setCurrentUser(JSON.parse(storedUser));
-    }
-    if (storedIsAdmin) {
-      setIsAdmin(JSON.parse(storedIsAdmin));
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string, pass: string): Promise<AuthUser | null> => {
     setLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const user = mockUsers.find(u => u.email === email && u.password === pass);
-    if (user) {
-      const authUser: AuthUser = { id: user.id, email: user.email, name: user.name, phone: user.phone, whatsapp: user.whatsapp };
-      setCurrentUser(authUser);
-      setIsAdmin(false); // Ensure admin is false on user login
-      localStorage.setItem('currentUser', JSON.stringify(authUser));
-      localStorage.removeItem('isAdmin');
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pass }),
+      });
+      if (response.ok) {
+        const { user, token } = await response.json();
+        setCurrentUser(user);
+        setIsAdmin(false);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        setLoading(false);
+        return user;
+      }
+      throw new Error('Invalid credentials');
+    } catch (error: any) {
       setLoading(false);
-      return authUser;
+      throw error;
     }
-    setLoading(false);
-    return null;
   };
 
   const signup = async (userData: Omit<User, 'id' | 'linkedQrCodes'>): Promise<AuthUser | null> => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    if (mockUsers.some(u => u.email === userData.email)) {
+    try {
+      const response = await fetch('http://localhost:3000/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      if (response.ok) {
+        const { user, token } = await response.json();
+        setCurrentUser(user);
+        setIsAdmin(false);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        setLoading(false);
+        return user;
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Signup failed');
+      }
+    } catch (error: any) {
       setLoading(false);
-      throw new Error("User already exists with this email.");
+      throw error;
     }
-    const newUser: User = {
-      id: `user${mockUsers.length + 1}`,
-      ...userData,
-      linkedQrCodes: [],
-    };
-    mockUsers.push(newUser); // Add to mock data
-    const authUser: AuthUser = { id: newUser.id, email: newUser.email, name: newUser.name, phone: newUser.phone, whatsapp: newUser.whatsapp };
-    setCurrentUser(authUser);
-    setIsAdmin(false);
-    localStorage.setItem('currentUser', JSON.stringify(authUser));
-    localStorage.removeItem('isAdmin');
-    setLoading(false);
-    return authUser;
   };
 
   const logout = () => {
     setCurrentUser(null);
     setIsAdmin(false);
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
+    router.push('/login');
   };
 
   const adminLogin = async (username: string, pass: string): Promise<boolean> => {
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    if (username === ADMIN_CREDENTIALS.username && pass === ADMIN_CREDENTIALS.password) {
-      setCurrentUser(null); // No regular user when admin is logged in
-      setIsAdmin(true);
-      localStorage.setItem('isAdmin', 'true');
-      localStorage.removeItem('currentUser');
+    try {
+      const response = await fetch('http://localhost:3000/auth/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password: pass }),
+      });
+      if (response.ok) {
+        setCurrentUser(null);
+        setIsAdmin(true);
+        localStorage.setItem('isAdmin', 'true');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        setLoading(false);
+        return true;
+      }
       setLoading(false);
-      return true;
+      return false;
+    } catch (error: any) {
+      setLoading(false);
+      return false;
     }
-    setLoading(false);
-    return false;
   };
-  
+
   const updateCurrentUser = (updatedFields: Partial<AuthUser>) => {
     if (currentUser) {
       const updatedUser = { ...currentUser, ...updatedFields };
       setCurrentUser(updatedUser);
       localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-      
-      // Update mockData.users as well for persistence across "sessions" in this demo
-      const userIndex = mockUsers.findIndex(u => u.id === currentUser.id);
-      if (userIndex !== -1) {
-        mockUsers[userIndex] = { ...mockUsers[userIndex], ...updatedFields };
-      }
     }
   };
-
 
   return (
     <AuthContext.Provider value={{ currentUser, isAdmin, loading, login, signup, logout, adminLogin, updateCurrentUser }}>
