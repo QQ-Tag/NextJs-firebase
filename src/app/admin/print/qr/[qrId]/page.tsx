@@ -9,7 +9,7 @@ import { STICKER_SIZES } from '@/lib/types';
 import { PageContainer } from '@/components/shared/PageContainer';
 import { PrintOptions } from '@/components/admin/PrintOptions';
 import { QrCodeSticker } from '@/components/admin/QrCodeSticker';
-import PrintPageLayout from '../PrintPageLayout';
+import PrintPageLayout from '../../PrintPageLayout';
 import { Loader2, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
