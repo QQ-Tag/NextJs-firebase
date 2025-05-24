@@ -5,7 +5,6 @@ export interface User {
   name: string;
   phone?: string;
   whatsapp?: string;
-  linkedQrCodes: string[]; // Array of QR code IDs
 }
 
 export interface QRCode {

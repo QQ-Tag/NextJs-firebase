@@ -1,25 +1,5 @@
 import type { User, QRCode, QRBatch } from './types';
 
-export let users: User[] = [
-  {
-    id: 'user1',
-    email: 'john@example.com',
-    password: 'password123', // In a real app, this would be hashed and not stored client-side
-    name: 'John Doe',
-    phone: '123-456-7890',
-    whatsapp: '1234567890',
-    linkedQrCodes: ['QR000001'],
-  },
-  {
-    id: 'user2',
-    email: 'jane@example.com',
-    password: 'password456',
-    name: 'Jane Smith',
-    phone: '987-654-3210',
-    linkedQrCodes: ['QR000003'],
-  },
-];
-
 export let qrCodes: QRCode[] = [
   {
     id: 'QR000001',
