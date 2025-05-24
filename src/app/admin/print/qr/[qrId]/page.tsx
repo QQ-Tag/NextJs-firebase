@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -26,11 +27,20 @@ export default function PrintSingleQrPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !isAdmin) {
-      router.push('/admin/login');
+    if (authLoading) {
+      // Wait for auth to resolve; isLoading is initially true.
       return;
     }
-    if (isAdmin && qrId) {
+
+    // Auth is resolved
+    if (!isAdmin) {
+      router.push('/admin/login?redirect=/admin/print/qr/' + qrId);
+      setIsLoading(false);
+      return;
+    }
+
+    // Auth is resolved, user is admin
+    if (qrId) {
       const fetchData = async () => {
         setIsLoading(true);
         try {
@@ -41,15 +51,22 @@ export default function PrintSingleQrPage() {
             setPrintableQr(data);
           } else {
             setPrintableQr(null);
+            // No need to setQrCode(null) again if fetchedQr is null
           }
         } catch (error) {
           console.error("Error fetching QR print data:", error);
+          setQrCode(null);
           setPrintableQr(null);
         } finally {
           setIsLoading(false);
         }
       };
       fetchData();
+    } else {
+      // Admin, but no qrId
+      setIsLoading(false);
+      setQrCode(null);
+      setPrintableQr(null);
     }
   }, [qrId, isAdmin, authLoading, router, selectedSize]);
   
@@ -58,12 +75,17 @@ export default function PrintSingleQrPage() {
   };
 
   const handlePrintAction = async () => {
-     // Re-fetch with current selectedSize if needed, though useEffect handles it
     if (qrId) {
       setIsLoading(true);
-      const data = await getPrintableQrData(qrId, selectedSize);
-      setPrintableQr(data);
-      setIsLoading(false);
+      try {
+        const data = await getPrintableQrData(qrId, selectedSize);
+        setPrintableQr(data);
+      } catch (error) {
+        console.error("Error refreshing printable QR data for print:", error);
+        setPrintableQr(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -75,7 +97,7 @@ export default function PrintSingleQrPage() {
     );
   }
   
-  if (!isAdmin) {
+  if (!isAdmin) { // Should be caught by useEffect, but as safeguard
      return (
       <PageContainer className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] text-center">
         <ShieldAlert className="h-16 w-16 text-destructive mb-4" />
@@ -90,7 +112,7 @@ export default function PrintSingleQrPage() {
       <PrintPageLayout title="Error: QR Code Not Found">
         <div className="text-center py-10">
           <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-          <p className="text-xl">The requested QR code (ID: {qrId}) could not be found or is not printable.</p>
+          <p className="text-xl">The requested QR code (ID: {qrId || 'N/A'}) could not be found or is not printable.</p>
            <Button asChild className="mt-6">
             <Link href="/admin/dashboard">Back to Admin Dashboard</Link>
           </Button>
@@ -105,8 +127,8 @@ export default function PrintSingleQrPage() {
         <div className="md:col-span-1 no-print">
           <PrintOptions
             availableSizes={STICKER_SIZES}
-            selectedSizes={[selectedSize]} // For single selection UI logic
-            onSizeChange={() => {}} // Not used for radio group in this setup
+            selectedSizes={[selectedSize]} 
+            onSizeChange={() => {}} 
             onSingleSizeChange={handleSizeChange}
             defaultSelectedSize={selectedSize}
             onPrint={handlePrintAction}

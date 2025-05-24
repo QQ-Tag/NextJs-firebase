@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { StickerSize } from '@/lib/types';
@@ -12,7 +13,7 @@ interface PrintOptionsProps {
   availableSizes: StickerSize[];
   selectedSizes: StickerSize[];
   onSizeChange: (size: StickerSize, checked: boolean) => void;
-  onPrint: () => void;
+  onPrint: () => Promise<void> | void; // Allow async or sync onPrint
   allowMultipleSizes?: boolean;
   defaultSelectedSize?: StickerSize;
   onSingleSizeChange?: (size: StickerSize) => void;
@@ -28,10 +29,15 @@ export function PrintOptions({
   onSingleSizeChange
 }: PrintOptionsProps) {
   
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (typeof window !== "undefined") {
-      onPrint(); // This might set up the content for printing
-      setTimeout(() => window.print(), 100); // Allow content to render before printing
+      if (onPrint) {
+        await onPrint(); // Await onPrint to ensure data is ready
+      }
+      // Allow React to complete its render cycle after onPrint state updates
+      setTimeout(() => {
+        window.print();
+      }, 50); // Small delay for DOM updates
     }
   };
 
@@ -71,7 +77,14 @@ export function PrintOptions({
           </RadioGroup>
         )}
       </div>
-      <Button onClick={handlePrint} className="w-full" disabled={!allowMultipleSizes && !defaultSelectedSize && (!onSingleSizeChange || selectedSizes.length === 0) || (allowMultipleSizes && selectedSizes.length === 0)}>
+      <Button 
+        onClick={handlePrint} 
+        className="w-full" 
+        disabled={
+          (allowMultipleSizes && selectedSizes.length === 0) || 
+          (!allowMultipleSizes && !defaultSelectedSize && !onSingleSizeChange) // Simpler check for single
+        }
+      >
         <Printer className="mr-2 h-4 w-4" />
         Download / Print Selected
       </Button>

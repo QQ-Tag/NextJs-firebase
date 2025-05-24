@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -26,50 +27,68 @@ export default function PrintBatchPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !isAdmin) {
-      router.push('/admin/login');
+    if (authLoading) {
+      // Wait for auth to resolve; isLoading is initially true, so loader will show.
       return;
     }
-    if (isAdmin && batchId) {
+
+    // Auth is resolved (authLoading is false)
+    if (!isAdmin) {
+      router.push('/admin/login?redirect=/admin/print/batch/' + batchId);
+      setIsLoading(false); // Set loading false as we are redirecting
+      return;
+    }
+
+    // Auth is resolved, user is admin
+    if (batchId) {
       const fetchData = async () => {
-        setIsLoading(true);
+        setIsLoading(true); // Set loading true for this specific fetch operation
         try {
           const fetchedBatch = await getBatchById(batchId);
           setBatch(fetchedBatch || null);
           if (fetchedBatch && selectedSizes.length > 0) {
             const data = await getPrintableBatchData(batchId, selectedSizes);
             setPrintableQrs(data);
-          } else if (!fetchedBatch) {
+          } else { 
             setPrintableQrs([]);
+            if (!fetchedBatch) setBatch(null);
           }
         } catch (error) {
           console.error("Error fetching batch print data:", error);
+          setBatch(null); 
           setPrintableQrs([]);
         } finally {
           setIsLoading(false);
         }
       };
       fetchData();
+    } else {
+      // Admin, but no batchId (e.g., invalid URL or params not ready)
+      setIsLoading(false); // Ensure loading is false so it can proceed to !batch check
+      setBatch(null);
+      setPrintableQrs([]);
     }
   }, [batchId, isAdmin, authLoading, router, selectedSizes]);
 
   const handleSizeChange = (size: StickerSize, checked: boolean) => {
     setSelectedSizes(prev => {
       const newSizes = checked ? [...prev, size] : prev.filter(s => s !== size);
-      // Ensure at least one size is selected, or default to Medium if none
       return newSizes.length > 0 ? newSizes : ['Medium'];
     });
   };
   
   const handlePrintAction = async () => {
-    // Re-fetch with current selectedSizes, as the useEffect dependency on selectedSizes handles this
-    // This function is mainly for the button's onClick which triggers the actual browser print via PrintOptions
-    // If a re-fetch is strictly needed on button click before print dialog:
     if (batchId && selectedSizes.length > 0) {
       setIsLoading(true);
-      const data = await getPrintableBatchData(batchId, selectedSizes);
-      setPrintableQrs(data);
-      setIsLoading(false);
+      try {
+        const data = await getPrintableBatchData(batchId, selectedSizes);
+        setPrintableQrs(data);
+      } catch (error) {
+        console.error("Error refreshing printable batch data for print:", error);
+        setPrintableQrs([]);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -82,7 +101,7 @@ export default function PrintBatchPage() {
     );
   }
 
-  if (!isAdmin) {
+  if (!isAdmin) { // Should be caught by useEffect redirect, but as a safeguard
      return (
       <PageContainer className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] text-center">
         <ShieldAlert className="h-16 w-16 text-destructive mb-4" />
@@ -97,7 +116,7 @@ export default function PrintBatchPage() {
       <PrintPageLayout title="Error: Batch Not Found">
         <div className="text-center py-10">
           <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-          <p className="text-xl">The requested batch (ID: {batchId}) could not be found.</p>
+          <p className="text-xl">The requested batch (ID: {batchId || 'N/A'}) could not be found.</p>
           <Button asChild className="mt-6">
             <Link href="/admin/dashboard">Back to Admin Dashboard</Link>
           </Button>
@@ -127,8 +146,6 @@ export default function PrintBatchPage() {
           </p>
           {printableQrs.length > 0 ? (
             <div className="flex flex-wrap gap-2 justify-center p-2 border border-gray-300 rounded">
-              {/* Stickers will be rendered here. Each sticker needs its own size handling. */}
-              {/* This part assumes getPrintableBatchData returns QRs with specific sizes assigned. */}
               {printableQrs.map((qr) => (
                 <QrCodeSticker key={qr.id} qrId={qr.id} uniqueId={qr.uniqueId} size={qr.size} text={qr.text} />
               ))}
