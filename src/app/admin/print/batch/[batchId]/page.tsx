@@ -1,4 +1,4 @@
-
+// src/app/admin/print/batch/[batchId]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 export default function PrintBatchPage() {
   const params = useParams();
-  const batchId = params.batchId as string;
+  const batchId = parseInt(params.batchId as string); // Convert to number
   const { isAdmin, loading: authLoading } = useAuth();
   const router = useRouter();
 
@@ -126,7 +126,7 @@ export default function PrintBatchPage() {
   }
   
   return (
-    <PrintPageLayout title={`Print Batch: ${batch.name}`}>
+    <PrintPageLayout title={`Print Batch: ${batch.batchName}`}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1 no-print">
           <PrintOptions
@@ -139,7 +139,7 @@ export default function PrintBatchPage() {
         </div>
         <div id="printable-area" className="md:col-span-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4 text-center print:mt-8">
-            Printing QR Codes for Batch: {batch.name} (IDs: {batch.startId} - {batch.endId})
+            Printing QR Codes for Batch: {batch.batchName} (IDs: {batch.startId} - {batch.endId})
           </h2>
           <p className="text-sm text-muted-foreground text-center mb-6 print:mb-2">
             Selected Sizes: {selectedSizes.join(', ')}
