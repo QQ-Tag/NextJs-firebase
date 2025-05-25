@@ -109,3 +109,10 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .print-bg-exact {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
