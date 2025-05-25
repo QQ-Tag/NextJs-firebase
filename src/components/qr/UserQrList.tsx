@@ -1,3 +1,4 @@
+// src/components/qr/UserQrList.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -34,7 +35,7 @@ export function UserQrList() {
     if (currentUser) {
       setIsLoading(true);
       const qrs = await getUserLinkedQrCodes(currentUser.id);
-      setLinkedQrs(qrs.filter(qr => qr.status === 'claimed')); // Only show currently claimed QRs
+      setLinkedQrs(qrs.filter(qr => qr.status === 'Claimed')); // Only show currently claimed QRs
       setIsLoading(false);
     }
   };
@@ -48,7 +49,7 @@ export function UserQrList() {
     }
   }, [currentUser, authLoading]);
 
-  const handleUnlink = async (qrId: string) => {
+  const handleUnlink = async (qrId: number) => {
     if (!currentUser) return;
     setActionLoading(prev => ({ ...prev, [qrId]: true }));
     try {
@@ -66,7 +67,7 @@ export function UserQrList() {
     }
   };
 
-  const handleDelete = async (qrId: string) => {
+  const handleDelete = async (qrId: number) => {
     if (!currentUser) return;
      setActionLoading(prev => ({ ...prev, [qrId]: true }));
     try {
@@ -135,6 +136,7 @@ export function UserQrList() {
           <TableHeader>
             <TableRow>
               <TableHead>QR ID</TableHead>
+              <TableHead>Unique ID</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -144,13 +146,14 @@ export function UserQrList() {
               <TableRow key={qr.id}>
                 <TableCell className="font-mono">
                   <div className="flex items-center gap-2">
-                    <Image src={`https://placehold.co/40x40.png?text=${qr.id.substring(2,4)}`} alt={qr.id} width={30} height={30} data-ai-hint="qr code" className="rounded-sm"/>
+                    {/* <Image src={`https://placehold.co/40x40.png?text=${qr.id.substring(2,4)}`} alt={qr.id} width={30} height={30} data-ai-hint="qr code" className="rounded-sm"/> */}
                     {qr.id}
                   </div>
                 </TableCell>
+                <TableCell className="font-mono">{qr.uniqueId}</TableCell>
                 <TableCell>
-                  <Badge variant={qr.status === 'claimed' ? 'default' : 'secondary'}>
-                    {qr.status.charAt(0).toUpperCase() + qr.status.slice(1)}
+                  <Badge variant={qr.status === 'Claimed' ? 'default' : 'secondary'}>
+                    {qr.status}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right space-x-2">
