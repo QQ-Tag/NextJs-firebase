@@ -1,3 +1,4 @@
+// src/components/admin/QrCodeTable.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,8 +24,8 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [batchFilter, setBatchFilter] = useState('all');
-  
+  const [batchFilter, setBatchFilter] = useState<number | 'all'>('all');
+
   const [allBatches, setAllBatches] = useState<QRBatch[]>(initialBatches);
   const [usersMap, setUsersMap] = useState<Map<string, User>>(new Map());
 
@@ -46,7 +47,7 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
           ownerEmail = owner?.email;
         }
         const batch = allBatches.find(b => b.id === qr.batchId);
-        return { ...qr, ownerEmail, batchName: batch?.name };
+        return { ...qr, ownerEmail, batchName: batch?.batchName };
       }));
       setQrs(detailedQrs);
       setIsLoading(false);
@@ -56,10 +57,11 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
 
 
   const filteredQrs = qrs.filter(qr => {
-    const searchMatch = qr.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        qr.uniqueId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (qr.ownerEmail && qr.ownerEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                        (qr.batchName && qr.batchName.toLowerCase().includes(searchTerm.toLowerCase()));
+    const searchMatch =
+      qr.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) || // Convert number to string
+      qr.uniqueId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (qr.ownerEmail && qr.ownerEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (qr.batchName && qr.batchName.toLowerCase().includes(searchTerm.toLowerCase()));
     const statusMatch = statusFilter === 'all' || qr.status === statusFilter;
     const batchMatch = batchFilter === 'all' || qr.batchId === batchFilter;
     return searchMatch && statusMatch && batchMatch;
@@ -95,19 +97,19 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="unclaimed">Unclaimed</SelectItem>
-              <SelectItem value="claimed">Claimed</SelectItem>
-              <SelectItem value="deleted">Deleted</SelectItem>
+              <SelectItem value="Unclaimed">Unclaimed</SelectItem>
+              <SelectItem value="Claimed">Claimed</SelectItem>
+              <SelectItem value="Deleted">Deleted</SelectItem>
             </SelectContent>
           </Select>
-           <Select value={batchFilter} onValueChange={setBatchFilter}>
+          <Select value={batchFilter.toString()} onValueChange={(value) => setBatchFilter(value === 'all' ? 'all' : parseInt(value))}>
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Filter by Batch" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Batches</SelectItem>
               {allBatches.map(batch => (
-                <SelectItem key={batch.id} value={batch.id}>{batch.name}</SelectItem>
+                <SelectItem key={batch.id} value={batch.id.toString()}>{batch.batchName}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -139,8 +141,8 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
                 <TableCell>
                   <Badge 
                     variant={
-                      qr.status === 'claimed' ? 'default' : 
-                      qr.status === 'unclaimed' ? 'secondary' : 
+                      qr.status === 'Claimed' ? 'default' : 
+                      qr.status === 'Unclaimed' ? 'secondary' : 
                       'destructive'
                     }
                   >
@@ -151,7 +153,7 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
                 <TableCell>{qr.batchName || qr.batchId}</TableCell>
                 <TableCell>{format(new Date(qr.createdAt), 'MMM dd, yyyy HH:mm')}</TableCell>
                 <TableCell className="text-right">
-                  {qr.status !== 'deleted' && (
+                  {qr.status !== 'Deleted' && (
                     <Button variant="outline" size="sm" asChild>
                       <Link href={`/admin/print/qr/${qr.id}`}>
                         <Printer className="h-4 w-4 mr-1" /> Print

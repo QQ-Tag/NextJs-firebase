@@ -1,3 +1,4 @@
+// src/app/qr/[uniqueId]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -33,7 +34,7 @@ export default function QrPage() {
         const fetchedQr = await getQrCodeByUniqueId(uniqueId);
         setQrCode(fetchedQr);
 
-        if (fetchedQr && fetchedQr.status === 'claimed' && fetchedQr.userId) {
+        if (fetchedQr && fetchedQr.status === 'Claimed' && fetchedQr.userId) {
           const fetchedOwner = await getOwnerByUserId(fetchedQr.userId);
           setOwner(fetchedOwner);
         }
@@ -44,10 +45,10 @@ export default function QrPage() {
   }, [uniqueId]);
 
   const handleClaim = async () => {
-    if (!qrCode || !currentUser || qrCode.status !== 'unclaimed') return;
+    if (!qrCode || !currentUser || qrCode.status !== 'Unclaimed') return;
     setIsClaiming(true);
     try {
-      const success = await claimQrCode(qrCode.uniqueId, currentUser.id);
+      const success = await claimQrCode(qrCode.id, currentUser.id); // Use qrCode.id (number)
       if (success) {
         toast({ title: "QR Code Claimed!", description: `QR ID ${qrCode.id} is now linked to your account.`, });
         // Re-fetch QR data to update UI
@@ -111,8 +112,7 @@ export default function QrPage() {
     );
   }
 
-
-  if (qrCode.status === 'claimed') {
+  if (qrCode.status === 'Claimed') {
     if (owner) {
         // If current user is the owner
         if (currentUser && currentUser.id === owner.id) {
@@ -166,7 +166,7 @@ export default function QrPage() {
     }
   }
 
-  if (qrCode.status === 'unclaimed') {
+  if (qrCode.status === 'Unclaimed') {
     if (currentUser) {
       return (
         <PageContainer className="flex flex-col items-center justify-center text-center">
@@ -227,8 +227,8 @@ export default function QrPage() {
       );
     }
   }
-  
-   if (qrCode.status === 'deleted') {
+
+  if (qrCode.status === 'Deleted') {
     return (
       <PageContainer className="flex flex-col items-center justify-center text-center">
         <Card className="w-full max-w-md shadow-lg">
