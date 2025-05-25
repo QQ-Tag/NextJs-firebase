@@ -1,3 +1,4 @@
+//src/components/qr/FinderContactCard.tsx
 'use client';
 
 import type { User } from '@/lib/types';
@@ -8,7 +9,7 @@ import Image from 'next/image';
 
 interface FinderContactCardProps {
   owner: User;
-  qrId: string;
+  qrId: number;
 }
 
 export function FinderContactCard({ owner, qrId }: FinderContactCardProps) {
