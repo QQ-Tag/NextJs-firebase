@@ -1,4 +1,4 @@
-
+//src/app/admin/print/qr/[qrId]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 export default function PrintSingleQrPage() {
   const params = useParams();
-  const qrId = params.qrId as string;
+  const qrId = parseInt(params.qrId as string);
   const { isAdmin, loading: authLoading } = useAuth();
   const router = useRouter();
 
