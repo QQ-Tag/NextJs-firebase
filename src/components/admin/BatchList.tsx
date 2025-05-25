@@ -1,3 +1,4 @@
+//src/components/admin/BatchList.tsx
 'use client';
 
 import type { QRBatch } from '@/lib/types';
@@ -47,7 +48,7 @@ export function BatchList({ batches }: BatchListProps) {
           <TableBody>
             {batches.map((batch) => (
               <TableRow key={batch.id}>
-                <TableCell className="font-medium">{batch.name}</TableCell>
+                <TableCell className="font-medium">{batch.batchName}</TableCell>
                 <TableCell className="font-mono">{batch.startId} - {batch.endId}</TableCell>
                 <TableCell>{batch.quantity}</TableCell>
                 <TableCell>

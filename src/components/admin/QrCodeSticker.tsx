@@ -5,7 +5,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { cn } from '@/lib/utils';
 
 interface QrCodeStickerProps {
-  qrId: string;
+  qrId: number;
   uniqueId: string;
   size: StickerSize;
   text: string;
