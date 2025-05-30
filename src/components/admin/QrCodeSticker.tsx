@@ -83,7 +83,7 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
 
       {/* QR ID below the sticker */}
       <p className={cn("font-mono text-center text-neutral-800 dark:text-neutral-300", currentStyle.idText)}>
-        {qrId}
+        {uniqueId}
       </p>
     </div>
   );
