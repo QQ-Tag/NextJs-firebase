@@ -28,21 +28,30 @@ export default function QrPage() {
   const [isClaiming, setIsClaiming] = useState(false);
 
   useEffect(() => {
-    if (uniqueId) {
-      const fetchQrData = async () => {
-        setIsLoading(true);
-        const fetchedQr = await getQrCodeByUniqueId(uniqueId);
-        setQrCode(fetchedQr);
+    const fetchQrData = async () => {
+      setIsLoading(true);
+      const fetchedQr = await getQrCodeByUniqueId(uniqueId);
+      setQrCode(fetchedQr);
 
-        if (fetchedQr && fetchedQr.status === 'Claimed' && fetchedQr.userId) {
-          const fetchedOwner = await getOwnerByUserId(fetchedQr.userId);
-          setOwner(fetchedOwner);
-        }
-        setIsLoading(false);
-      };
+      if (fetchedQr && fetchedQr.status === 'Claimed' && fetchedQr.userId) {
+        const fetchedOwner = await getOwnerByUserId(fetchedQr.userId);
+        setOwner(fetchedOwner);
+      }
+      setIsLoading(false);
+    };
+
+    if (uniqueId) {
       fetchQrData();
     }
   }, [uniqueId]);
+
+  // Clear pendingQrRedirect after rendering the claim screen
+  useEffect(() => {
+    const pendingQrRedirect = localStorage.getItem('pendingQrRedirect');
+    if (pendingQrRedirect === uniqueId && currentUser && qrCode && qrCode.status === 'Unclaimed') {
+      localStorage.removeItem('pendingQrRedirect'); // Clean up immediately
+    }
+  }, [uniqueId, currentUser, qrCode]);
 
   const handleClaim = async () => {
     if (!qrCode || !currentUser || qrCode.status !== 'Unclaimed') return;
@@ -58,6 +67,7 @@ export default function QrPage() {
             const fetchedOwner = await getOwnerByUserId(updatedQr.userId);
             setOwner(fetchedOwner);
         }
+        router.push('/dashboard');
       } else {
         toast({ variant: "destructive", title: "Claim Failed", description: "Could not claim this QR code. It might have been claimed by someone else." });
       }
@@ -68,7 +78,7 @@ export default function QrPage() {
     }
   };
 
-  if (isLoading || authLoading) {
+  if (isLoading || authLoading || isClaiming) {
     return (
       <PageContainer className="flex items-center justify-center min-h-[calc(100vh-8rem)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -114,35 +124,33 @@ export default function QrPage() {
 
   if (qrCode.status === 'Claimed') {
     if (owner) {
-        // If current user is the owner
-        if (currentUser && currentUser.id === owner.id) {
-             return (
-                <PageContainer className="flex flex-col items-center justify-center text-center">
-                    <Card className="w-full max-w-md shadow-lg">
-                        <CardHeader>
-                            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                            <CardTitle>This QR Code is Yours!</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p>QR ID: <span className="font-mono">{qrCode.id}</span> is already linked to your account.</p>
-                            <Image 
-                                src={`https://placehold.co/150x150.png?text=${qrCode.id}`}
-                                alt={`QR Code ${qrCode.id}`}
-                                width={150}
-                                height={150}
-                                className="mx-auto my-4 border rounded-md shadow-sm"
-                                data-ai-hint="qr code"
-                            />
-                            <p className="text-sm text-muted-foreground mb-2">Item linked: {qrCode.id}</p>
-                            <Button asChild className="mt-4">
-                                <Link href="/dashboard">Go to Dashboard</Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </PageContainer>
-            );
-        }
-      // If someone else is the owner, show finder card
+      if (currentUser && currentUser.id === owner.id) {
+        return (
+          <PageContainer className="flex flex-col items-center justify-center text-center">
+            <Card className="w-full max-w-md shadow-lg">
+              <CardHeader>
+                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <CardTitle>This QR Code is Yours!</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>QR ID: <span className="font-mono">{qrCode.id}</span> is already linked to your account.</p>
+                <Image
+                  src={`https://placehold.co/150x150.png?text=${qrCode.id}`}
+                  alt={`QR Code ${qrCode.id}`}
+                  width={150}
+                  height={150}
+                  className="mx-auto my-4 border rounded-md shadow-sm"
+                  data-ai-hint="qr code"
+                />
+                <p className="text-sm text-muted-foreground mb-2">Item linked: {qrCode.id}</p>
+                <Button asChild className="mt-4">
+                  <Link href="/dashboard">Go to Dashboard</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </PageContainer>
+        );
+      }
       return (
         <PageContainer className="flex items-center justify-center">
           <FinderContactCard owner={owner} qrId={qrCode.id} />
@@ -194,22 +202,22 @@ export default function QrPage() {
         </PageContainer>
       );
     } else {
-      // Not logged in, QR is unclaimed
+      // Show login/signup options for unauthenticated users
       return (
         <PageContainer className="flex flex-col items-center justify-center text-center">
           <Card className="w-full max-w-md shadow-lg">
-             <CardHeader>
-                <Image 
-                    src={`https://placehold.co/150x150.png?text=${qrCode.id}`}
-                    alt={`QR Code ${qrCode.id}`}
-                    width={150}
-                    height={150}
-                    className="mx-auto mb-4 border rounded-md shadow-sm"
-                    data-ai-hint="qr code"
-                />
-                <CardTitle>Unclaimed QR Code</CardTitle>
-                <CardDescription>QR ID: <span className="font-mono">{qrCode.id}</span></CardDescription>
-             </CardHeader>
+            <CardHeader>
+              <Image
+                src={`https://placehold.co/150x150.png?text=${qrCode.id}`}
+                alt={`QR Code ${qrCode.id}`}
+                width={150}
+                height={150}
+                className="mx-auto mb-4 border rounded-md shadow-sm"
+                data-ai-hint="qr code"
+              />
+              <CardTitle>Unclaimed QR Code</CardTitle>
+              <CardDescription>QR ID: <span className="font-mono">{qrCode.id}</span></CardDescription>
+            </CardHeader>
             <CardContent>
               <p className="mb-2">This QR code is available to be claimed.</p>
               <p className="mb-6 text-muted-foreground">Log in or sign up to link it to your account.</p>

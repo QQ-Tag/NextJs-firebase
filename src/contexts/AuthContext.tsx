@@ -2,6 +2,7 @@
 
 import type { AuthUser } from '@/lib/types';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('auth_token');
@@ -62,6 +65,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
       const { access_token, user } = data;
 
+      // Store uniqueId from redirect query parameter
+      const redirectUrl = searchParams.get('redirect');
+      if (redirectUrl && redirectUrl.startsWith('/qr/')) {
+        const uniqueId = redirectUrl.split('/qr/')[1];
+        if (uniqueId) {
+          localStorage.setItem('pendingQrRedirect', uniqueId); // Changed key to avoid auto-claim confusion
+        }
+      }
+
       setToken(access_token);
       setCurrentUser(user);
       setIsAdmin(false);
@@ -69,6 +81,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('auth_token', access_token);
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.removeItem('isAdmin');
+
+      // Redirect to QR code page if present, else dashboard
+      router.push(redirectUrl || '/dashboard');
       
       return user;
     } catch (error) {
@@ -97,6 +112,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
       const { access_token, user } = data;
 
+      // Store uniqueId from redirect query parameter
+      const redirectUrl = searchParams.get('redirect');
+      if (redirectUrl && redirectUrl.startsWith('/qr/')) {
+        const uniqueId = redirectUrl.split('/qr/')[1];
+        if (uniqueId) {
+          localStorage.setItem('pendingQrRedirect', uniqueId);
+        }
+      }
+
       setToken(access_token);
       setCurrentUser(user);
       setIsAdmin(false);
@@ -104,6 +128,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('auth_token', access_token);
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.removeItem('isAdmin');
+
+      // Redirect to QR code page if present, else dashboard
+      router.push(redirectUrl || '/dashboard');
       
       return user;
     } catch (error) {
@@ -167,6 +194,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
       const { access_token, user } = data;
 
+      // Store uniqueId from redirect query parameter
+      const redirectUrl = searchParams.get('redirect');
+      if (redirectUrl && redirectUrl.startsWith('/qr/')) {
+        const uniqueId = redirectUrl.split('/qr/')[1];
+        if (uniqueId) {
+          localStorage.setItem('pendingQrRedirect', uniqueId);
+        }
+      }
+
       setToken(access_token);
       setCurrentUser(user);
       setIsAdmin(false);
@@ -174,6 +210,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('auth_token', access_token);
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.removeItem('isAdmin');
+
+      // Redirect to QR code page if present, else dashboard
+      router.push(redirectUrl || '/dashboard');
       
       return user;
     } catch (error) {
@@ -190,6 +229,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('isAdmin');
+    localStorage.removeItem('pendingQrRedirect');
+    router.push('/');
   };
 
   const updateCurrentUser = (updatedFields: Partial<AuthUser>) => {

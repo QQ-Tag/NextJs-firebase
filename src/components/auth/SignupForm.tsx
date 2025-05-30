@@ -16,10 +16,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
 const phoneRegex = new RegExp(
@@ -36,7 +36,7 @@ const formSchema = z.object({
 
 export function SignupForm() {
   const { signup } = useAuth();
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -57,18 +57,18 @@ export function SignupForm() {
       const user = await signup({
         name: values.name,
         email: values.email,
-        password: values.password, // In a real app, password would be handled securely
+        password: values.password,
         phone: values.phone || undefined,
         whatsapp: values.whatsapp || undefined,
       });
       if (user) {
-        toast({ title: "Signup Successful", description: `Welcome, ${user.name}! Your account has been created.` });
-        router.push('/dashboard');
+        toast({ title: 'Signup Successful', description: `Welcome, ${user.name}! Your account has been created.` });
+        // Redirect handled in AuthContext
       } else {
-         toast({ variant: "destructive", title: "Signup Failed", description: "Could not create your account. Please try again." });
+        toast({ variant: 'destructive', title: 'Signup Failed', description: 'Could not create your account. Please try again.' });
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Signup Error", description: error.message || "An unexpected error occurred." });
+      toast({ variant: 'destructive', title: 'Signup Error', description: error.message || 'An unexpected error occurred.' });
     } finally {
       setIsLoading(false);
     }

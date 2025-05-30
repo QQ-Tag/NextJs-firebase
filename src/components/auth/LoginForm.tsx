@@ -16,12 +16,11 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -30,7 +29,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const { login } = useAuth();
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -47,13 +46,13 @@ export function LoginForm() {
     try {
       const user = await login(values.email, values.password);
       if (user) {
-        toast({ title: "Login Successful", description: `Welcome back, ${user.name}!` });
-        router.push('/dashboard');
+        toast({ title: 'Login Successful', description: `Welcome back, ${user.name}!` });
+        // Redirect handled in AuthContext
       } else {
-        toast({ variant: "destructive", title: "Login Failed", description: "Invalid email or password." });
+        toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
       }
     } catch (error: any) {
-       toast({ variant: "destructive", title: "Login Error", description: error.message || "An unexpected error occurred." });
+      toast({ variant: 'destructive', title: 'Login Error', description: error.message || 'An unexpected error occurred.' });
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +102,7 @@ export function LoginForm() {
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{' '}
+          Don't have an account?{' '}
           <Button variant="link" asChild className="p-0 h-auto">
             <Link href="/signup">Sign up</Link>
           </Button>
