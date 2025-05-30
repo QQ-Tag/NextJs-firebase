@@ -64,7 +64,7 @@ export function LoginForm() {
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-center">Welcome Back!</CardTitle>
         <CardDescription className="text-center">
-          Access your StickerFind account.
+          Access your QQ Tag account.
         </CardDescription>
       </CardHeader>
       <CardContent>

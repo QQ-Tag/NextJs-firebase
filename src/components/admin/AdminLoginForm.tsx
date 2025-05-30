@@ -62,7 +62,7 @@ export function AdminLoginForm() {
         <ShieldCheck className="h-16 w-16 text-primary mx-auto mb-4" />
         <CardTitle className="text-3xl font-bold">Admin Access</CardTitle>
         <CardDescription>
-          Secure login for StickerFind administrators.
+          Secure login for QQ Tag administrators.
         </CardDescription>
       </CardHeader>
       <CardContent>

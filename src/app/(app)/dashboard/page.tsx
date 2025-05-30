@@ -40,7 +40,7 @@ export default function DashboardPage() {
     <PageContainer className="py-8 space-y-8">
       <section>
         <h1 className="text-3xl font-bold mb-2">Welcome back, {currentUser.name}!</h1>
-        <p className="text-muted-foreground">Here&apos;s an overview of your StickerFind account.</p>
+        <p className="text-muted-foreground">Here&apos;s an overview of your QQ Tag account.</p>
       </section>
 
       <section>

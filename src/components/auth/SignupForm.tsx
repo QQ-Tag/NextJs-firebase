@@ -79,7 +79,7 @@ export function SignupForm() {
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-center">Create an Account</CardTitle>
         <CardDescription className="text-center">
-          Join StickerFind and protect your belongings.
+          Join QQ Tag and protect your belongings.
         </CardDescription>
       </CardHeader>
       <CardContent>

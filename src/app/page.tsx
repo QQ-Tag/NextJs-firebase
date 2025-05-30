@@ -17,7 +17,7 @@ export default function HomePage() {
                   Never Lose Your Valuables Again
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl mx-auto lg:mx-0">
-                  StickerFind helps you recover lost items with smart QR code stickers. Simple for owners, easy for finders.
+                  QQ Tag helps you recover lost items with smart QR code stickers. Simple for owners, easy for finders.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center lg:justify-start">
@@ -45,7 +45,7 @@ export default function HomePage() {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Key Features</div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">How StickerFind Works</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">How QQ Tag Works</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Our system is designed for simplicity and effectiveness, ensuring your lost items find their way back to you.
             </p>
@@ -95,7 +95,7 @@ export default function HomePage() {
               Ready to protect your items?
             </h2>
             <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Join StickerFind today and experience peace of mind.
+              Join QQ Tag today and experience peace of mind.
             </p>
           </div>
           <div className="mx-auto w-full max-w-sm space-y-2">

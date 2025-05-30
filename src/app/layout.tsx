@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'StickerFind - Lost and Found QR System',
-  description: 'Easily recover lost items with StickerFind QR codes.',
+  title: 'QQ Tag - Lost and Found QR System',
+  description: 'Easily recover lost items with QQ Tag QR codes.',
 };
 
 export default function RootLayout({
