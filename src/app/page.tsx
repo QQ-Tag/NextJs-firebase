@@ -30,7 +30,7 @@ export default function HomePage() {
               </div>
             </div>
             <Image
-              src="https://placehold.co/600x400.png"
+              src="/assets/images.png"
               alt="Hero Image"
               width={600}
               height={400}
