@@ -17,7 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -27,7 +27,7 @@ const formSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-export function LoginForm() {
+function LoginFormInner() {
   const { login } = useAuth();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -120,5 +120,13 @@ export function LoginForm() {
         <GoogleLoginButton />
       </CardContent>
     </Card>
+  );
+}
+
+export function LoginForm() {
+  return (
+    <Suspense fallback={<div>Loading login form...</div>}>
+      <LoginFormInner />
+    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import type { AuthUser } from '@/lib/types';
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -21,7 +21,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+// Separate component that uses useSearchParams
+function AuthProviderInner({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -256,6 +257,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }}>
       {children}
     </AuthContext.Provider>
+  );
+}
+
+// Main AuthProvider with Suspense wrapper
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <Suspense fallback={<div>Loading authentication...</div>}>
+      <AuthProviderInner>{children}</AuthProviderInner>
+    </Suspense>
   );
 };
 

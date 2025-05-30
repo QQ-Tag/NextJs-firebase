@@ -17,7 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -34,7 +34,7 @@ const formSchema = z.object({
   whatsapp: z.string().regex(phoneRegex, 'Invalid WhatsApp number').optional().or(z.literal('')),
 });
 
-export function SignupForm() {
+function SignupFormInner() {
   const { signup } = useAuth();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -175,5 +175,13 @@ export function SignupForm() {
         <GoogleLoginButton />
       </CardContent>
     </Card>
+  );
+}
+
+export function SignupForm() {
+  return (
+    <Suspense fallback={<div>Loading signup form...</div>}>
+      <SignupFormInner />
+    </Suspense>
   );
 }
