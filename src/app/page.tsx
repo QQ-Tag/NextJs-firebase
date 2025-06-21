@@ -371,98 +371,99 @@ export default function HomePage() {
 
       {/* Footer - Outside PageContainer for full width */}
       <footer className="bg-gray-900 text-gray-300">
-        <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
+        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {/* Logo and description */}
-            <div className="space-y-4">
+            <div className="space-y-4 sm:col-span-2 lg:col-span-1">
               <div className="flex items-center space-x-2">
-                <QrCode className="h-8 w-8 text-blue-400" />
-                <span className="text-xl font-bold text-white">
-                  QR Lost & Found
-                </span>
+                <QrCode className="h-8 w-8 text-blue-400 flex-shrink-0" />
+                <span className="text-xl font-bold text-white">QR Lost & Found</span>
               </div>
-              <p className="max-w-xs text-sm">
-                Helping students recover lost items with our innovative QR code
-                sticker system.
+              <p className="text-sm leading-relaxed max-w-sm">
+                Helping students recover lost items with our innovative QR code sticker system.
               </p>
             </div>
-
+            
             {/* Quick links */}
-            <div>
-              <h3 className="mb-4 text-lg font-semibold text-white">
-                Quick Links
-              </h3>
-              <ul className="space-y-2 text-sm">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+              <ul className="space-y-3 text-sm">
                 <li>
-                  <Link
-                    href="/"
-                    className="hover:text-blue-400 transition-colors"
-                  >
+                  <Link href="/" className="hover:text-blue-400 transition-colors duration-200 inline-block">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/login"
-                    className="hover:text-blue-400 transition-colors"
-                  >
+                  <Link href="/login" className="hover:text-blue-400 transition-colors duration-200 inline-block">
                     Login
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/register"
-                    className="hover:text-blue-400 transition-colors"
-                  >
+                  <Link href="/register" className="hover:text-blue-400 transition-colors duration-200 inline-block">
                     Register
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/admin/login" className="hover:text-blue-400 transition-colors duration-200 inline-block">
+                    Admin
                   </Link>
                 </li>
               </ul>
             </div>
-
+            
             {/* Contact */}
-            <div>
-              <h3 className="mb-4 text-lg font-semibold text-white">
-                Contact Us
-              </h3>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Contact Us</h3>
               <ul className="space-y-3 text-sm">
-                <li className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-blue-400" />
-                  <span>support@qrlostfound.com</span>
+                <li className="flex items-start space-x-3">
+                  <Mail className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="break-words">support@qrlostfound.com</span>
                 </li>
-                <li className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4 text-blue-400" />
+                <li className="flex items-start space-x-3">
+                  <Phone className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
                   <span>+1 (555) 123-4567</span>
                 </li>
               </ul>
             </div>
-
+            
             {/* Newsletter */}
-            <div className="md:col-span-3 lg:col-span-1">
-              <h3 className="mb-4 text-lg font-semibold text-white">
-                Stay Updated
-              </h3>
-              <form className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+            <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+              <h3 className="text-lg font-semibold text-white">Stay Updated</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Subscribe to get the latest updates and features.
+              </p>
+              <form className="space-y-3">
                 <input
                   type="email"
-                  placeholder="Your email"
-                  className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1"
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   required
                 />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors whitespace-nowrap"
+                <button 
+                  type="submit" 
+                  className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200"
                 >
                   Subscribe
                 </button>
               </form>
             </div>
           </div>
-
-          <div className="mt-8 border-t border-gray-800 pt-8 text-center text-sm">
-            <p suppressHydrationWarning={true}>
-              © {new Date().getFullYear()} QR Lost & Found. All rights reserved.
-            </p>
+          
+          {/* Bottom section */}
+          <div className="mt-12 pt-8 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+              <p className="text-sm text-gray-400">
+                © {new Date().getFullYear()} QR Lost & Found. All rights reserved.
+              </p>
+              <div className="flex items-center space-x-6 text-sm">
+                <Link href="/privacy" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link href="/terms" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  Terms of Service
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
