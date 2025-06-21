@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { FinderContactCard } from '@/components/qr/FinderContactCard';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Loader2, CheckCircle, AlertTriangle, HelpCircle } from 'lucide-react';
+import { Loader2, CheckCircle, AlertTriangle, HelpCircle, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function QrPage() {
@@ -129,7 +129,11 @@ export default function QrPage() {
           <PageContainer className="flex flex-col items-center justify-center text-center">
             <Card className="w-full max-w-md shadow-lg">
               <CardHeader>
-                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <div className="mb-4 flex justify-center">
+                  <div className="rounded-full bg-blue-100 p-3">
+                    <QrCode className="h-8 w-8 text-blue-600" />
+                  </div>
+                </div>
                 <CardTitle>This QR Code is Yours!</CardTitle>
               </CardHeader>
               <CardContent>
@@ -142,7 +146,11 @@ export default function QrPage() {
                   className="mx-auto my-4 border rounded-md shadow-sm"
                   data-ai-hint="qr code"
                 />
-                <p className="text-sm text-muted-foreground mb-2">Item linked: {qrCode.id}</p>
+                {/* <p className="text-sm text-muted-foreground mb-2">Item linked: {qrCode.id}</p> */}
+                <p className="mb-2 text-sm text-gray-600">
+                  When someone else scans it, they'll see your
+                  contact information.
+                </p>
                 <Button asChild className="mt-4">
                   <Link href="/dashboard">Go to Dashboard</Link>
                 </Button>
