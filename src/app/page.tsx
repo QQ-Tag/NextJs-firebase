@@ -25,7 +25,7 @@ export default function HomePage() {
     >
       <PageContainer className="relative overflow-hidden py-0">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 lg:py-40">
+        <section className="relative py-10 md:py-12 lg:py-10">
           {/* Background decorations */}
           <div className="absolute inset-0 -z-10">
             <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl"></div>
@@ -33,9 +33,9 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-7xl mx-auto">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-              <div className="flex flex-col justify-center space-y-8 text-center lg:text-left animate-fade-in">
-                <div className="space-y-6">
+            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+              <div className="flex flex-col justify-center space-y-6 text-center lg:text-left animate-fade-in">
+                <div className="space-y-4">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <Sparkles className="w-4 h-4" />
                     Smart QR Technology
@@ -72,7 +72,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Trust indicators */}
-                <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start pt-4">
+                <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start pt-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <CheckCircle className="w-4 h-4 text-green-500" />
                     Free to start
@@ -111,9 +111,9 @@ export default function HomePage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="py-20 md:py-32 bg-gradient-to-r from-gray-50/80 to-blue-50/80 backdrop-blur-sm -mx-4 sm:-mx-6 lg:-mx-8">
+        <section className="py-10 md:py-12 bg-gradient-to-r from-gray-50/80 to-blue-50/80 backdrop-blur-sm -mx-4 sm:-mx-6 lg:-mx-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
                 <Zap className="w-4 h-4" />
                 Simple Process
@@ -127,15 +127,15 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto">
+            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto">
               {/* Step 1 */}
-              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
+              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
                     <Tag className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">
+                  <h3 className="text-xl font-semibold mb-3">
                     1. Purchase QR Stickers
                   </h3>
                   <p className="text-gray-600 text-base leading-relaxed">
@@ -146,13 +146,13 @@ export default function HomePage() {
               </div>
 
               {/* Step 2 */}
-              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
+              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
                     <QrCode className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">
+                  <h3 className="text-xl font-semibold mb-3">
                     2. Link to Your Account
                   </h3>
                   <p className="text-gray-600 text-base leading-relaxed">
@@ -163,13 +163,13 @@ export default function HomePage() {
               </div>
 
               {/* Step 3 */}
-              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
+              <div className="group relative overflow-hidden border-0 bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 text-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
                     <Smartphone className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">
+                  <h3 className="text-xl font-semibold mb-3">
                     3. Get Found Fast
                   </h3>
                   <p className="text-gray-600 text-base leading-relaxed">
@@ -183,7 +183,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 md:py-32">
+        <section className="py-10 md:py-12">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
@@ -199,7 +199,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
               {/* Feature 1 */}
               <div className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center space-x-3 mb-4">
@@ -322,10 +322,10 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 md:py-32">
+        <section className="py-10 md:py-12">
           <div className="max-w-7xl mx-auto">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 p-1">
-              <div className="bg-white rounded-[calc(1.5rem-1px)] p-12 md:p-16 text-center">
+              <div className="bg-white rounded-[calc(1.5rem-1px)] p-8 md:p-12 text-center">
                 <div className="space-y-6 max-w-3xl mx-auto">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <Globe className="w-4 h-4" />
@@ -371,7 +371,7 @@ export default function HomePage() {
 
       {/* Footer - Outside PageContainer for full width */}
       <footer className="bg-gray-900 text-gray-300">
-        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {/* Logo and description */}
             <div className="space-y-4 sm:col-span-2 lg:col-span-1">
@@ -450,7 +450,7 @@ export default function HomePage() {
           </div>
           
           {/* Bottom section */}
-          <div className="mt-12 pt-8 border-t border-gray-800">
+          <div className="mt-8 pt-6 border-t border-gray-800">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
               <p className="text-sm text-gray-400">
                 © {new Date().getFullYear()} QR Lost & Found. All rights reserved.
