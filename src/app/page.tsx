@@ -57,7 +57,7 @@ export default function HomePage() {
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                   <Link
-                    href="/register"
+                    href="/signup"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group text-lg"
                   >
                     Get Started Free
@@ -343,7 +343,7 @@ export default function HomePage() {
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                     <Link
-                      href="/register"
+                      href="/signup"
                       className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group text-lg"
                     >
                       <Star className="w-5 h-5" />
@@ -377,7 +377,7 @@ export default function HomePage() {
             <div className="space-y-4 sm:col-span-2 lg:col-span-1">
               <div className="flex items-center space-x-2">
                 <QrCode className="h-8 w-8 text-blue-400 flex-shrink-0" />
-                <span className="text-xl font-bold text-white">QR Lost & Found</span>
+                <span className="text-xl font-bold text-white">QQ Tag</span>
               </div>
               <p className="text-sm leading-relaxed max-w-sm">
                 Helping students recover lost items with our innovative QR code sticker system.
@@ -399,7 +399,7 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/register" className="hover:text-blue-400 transition-colors duration-200 inline-block">
+                  <Link href="/signup" className="hover:text-blue-400 transition-colors duration-200 inline-block">
                     Register
                   </Link>
                 </li>
@@ -417,7 +417,7 @@ export default function HomePage() {
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start space-x-3">
                   <Mail className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="break-words">support@qrlostfound.com</span>
+                  <span className="break-words">support@qqtag.com</span>
                 </li>
                 <li className="flex items-start space-x-3">
                   <Phone className="h-4 w-4 text-blue-400 flex-shrink-0 mt-0.5" />
@@ -453,7 +453,7 @@ export default function HomePage() {
           <div className="mt-8 pt-6 border-t border-gray-800">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
               <p className="text-sm text-gray-400">
-                © {new Date().getFullYear()} QR Lost & Found. All rights reserved.
+                © {new Date().getFullYear()} QR Tag. All rights reserved.
               </p>
               <div className="flex items-center space-x-6 text-sm">
                 <Link href="/privacy" className="text-gray-400 hover:text-blue-400 transition-colors">
