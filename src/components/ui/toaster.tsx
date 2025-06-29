@@ -1,6 +1,6 @@
 "use client"
 
-import { useToast, getToastIcon } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
   ToastClose,
@@ -8,6 +8,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
+  getToastIcon,
 } from "@/components/ui/toast"
 
 export function Toaster() {
