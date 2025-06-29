@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -106,16 +106,16 @@ export function GoogleLoginButton() {
   return (
     <Button
       variant="outline"
-      className="w-full h-9 border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 text-xs"
+      className="w-full h-9 border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 text-gray-700 hover:text-gray-900 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 text-xs font-medium"
       onClick={handleGoogleLogin}
       disabled={isLoading}
     >
       {isLoading ? (
-        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin text-gray-600" />
       ) : (
         <GoogleIcon />
       )}
-      <span className="ml-1.5 font-medium">
+      <span className="ml-1.5">
         {isLoading ? 'Signing in...' : 'Continue with Google'}
       </span>
     </Button>
