@@ -2,7 +2,7 @@
 
 import type { AuthUser } from '@/lib/types';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -27,7 +27,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
+
+  // Helper function to get redirect URL from browser
+  const getRedirectUrl = (): string | null => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('redirect');
+    }
+    return null;
+  };
 
   useEffect(() => {
     const storedToken = localStorage.getItem('auth_token');
@@ -66,11 +74,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token, user } = data;
 
       // Store uniqueId from redirect query parameter
-      const redirectUrl = searchParams.get('redirect');
+      const redirectUrl = getRedirectUrl();
       if (redirectUrl && redirectUrl.startsWith('/qr/')) {
         const uniqueId = redirectUrl.split('/qr/')[1];
         if (uniqueId) {
-          localStorage.setItem('pendingQrRedirect', uniqueId); // Changed key to avoid auto-claim confusion
+          localStorage.setItem('pendingQrRedirect', uniqueId);
         }
       }
 
@@ -113,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token, user } = data;
 
       // Store uniqueId from redirect query parameter
-      const redirectUrl = searchParams.get('redirect');
+      const redirectUrl = getRedirectUrl();
       if (redirectUrl && redirectUrl.startsWith('/qr/')) {
         const uniqueId = redirectUrl.split('/qr/')[1];
         if (uniqueId) {
@@ -195,7 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token, user } = data;
 
       // Store uniqueId from redirect query parameter
-      const redirectUrl = searchParams.get('redirect');
+      const redirectUrl = getRedirectUrl();
       if (redirectUrl && redirectUrl.startsWith('/qr/')) {
         const uniqueId = redirectUrl.split('/qr/')[1];
         if (uniqueId) {

@@ -16,8 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -34,11 +33,22 @@ const formSchema = z.object({
   whatsapp: z.string().regex(phoneRegex, 'Invalid WhatsApp number').optional().or(z.literal('')),
 });
 
-export function SignupForm() {
+interface SignupFormProps {
+  redirectTo?: string;
+}
+
+export function SignupForm({ redirectTo }: SignupFormProps) {
   const { signup } = useAuth();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [redirect, setRedirect] = useState<string | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setRedirect(redirectTo || urlParams.get('redirect') || '/dashboard');
+    }
+  }, [redirectTo]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,7 +73,9 @@ export function SignupForm() {
       });
       if (user) {
         toast({ title: 'Signup Successful', description: `Welcome, ${user.name}! Your account has been created.` });
-        // Redirect handled in AuthContext
+        if (redirect && typeof window !== 'undefined') {
+          window.location.href = redirect;
+        }
       } else {
         toast({ variant: 'destructive', title: 'Signup Failed', description: 'Could not create your account. Please try again.' });
       }

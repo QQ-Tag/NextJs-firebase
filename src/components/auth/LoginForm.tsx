@@ -16,8 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GoogleLoginButton } from './GoogleLoginButton';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -27,11 +26,23 @@ const formSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-export function LoginForm() {
+interface LoginFormProps {
+  redirectTo?: string; // Pass redirect URL as prop instead
+}
+
+export function LoginForm({ redirectTo }: LoginFormProps) {
   const { login } = useAuth();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [redirect, setRedirect] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Get redirect from URL on client side only
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setRedirect(redirectTo || urlParams.get('redirect') || '/dashboard');
+    }
+  }, [redirectTo]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,7 +58,10 @@ export function LoginForm() {
       const user = await login(values.email, values.password);
       if (user) {
         toast({ title: 'Login Successful', description: `Welcome back, ${user.name}!` });
-        // Redirect handled in AuthContext
+        // Redirect handled in AuthContext or manually redirect
+        if (redirect && typeof window !== 'undefined') {
+          window.location.href = redirect;
+        }
       } else {
         toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
       }
