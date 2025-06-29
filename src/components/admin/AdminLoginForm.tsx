@@ -64,42 +64,42 @@ export function AdminLoginForm() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-400/20 to-cyan-600/20 rounded-full blur-3xl"></div>
       </div>
 
-      <Card className="w-full max-w-md relative backdrop-blur-sm bg-white/90 shadow-2xl border-0 overflow-hidden">
+      <Card className="w-full max-w-sm relative backdrop-blur-sm bg-white/90 shadow-2xl border-0 overflow-hidden">
         {/* Gradient border effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl blur opacity-75"></div>
         <div className="relative bg-white rounded-xl m-1">
-          <CardHeader className="text-center pb-8 pt-8">
-            <div className="mx-auto mb-6 relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                <ShieldCheck className="h-10 w-10 text-white" />
+          <CardHeader className="text-center pb-4 pt-6">
+            <div className="mx-auto mb-4 relative">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                <ShieldCheck className="h-8 w-8 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                <Lock className="h-3 w-3 text-white" />
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                <Lock className="h-2.5 w-2.5 text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               Admin Access
             </CardTitle>
-            <CardDescription className="text-gray-600 mt-2">
+            <CardDescription className="text-gray-600 text-sm">
               Secure login for QQ Tag administrators
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="px-8 pb-8">
+          <CardContent className="px-6 pb-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">Username</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-sm">Username</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <Input 
                             placeholder="admin_user" 
-                            className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
+                            className="pl-9 h-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-sm"
                             {...field} 
                           />
                         </div>
@@ -113,14 +113,14 @@ export function AdminLoginForm() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">Password</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-sm">Password</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <Input 
                             type="password" 
                             placeholder="••••••••" 
-                            className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
+                            className="pl-9 h-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-sm"
                             {...field} 
                           />
                         </div>
@@ -131,16 +131,16 @@ export function AdminLoginForm() {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
+                  className="w-full h-10 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 text-sm" 
                   disabled={isLoading}
                 >
-                  {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {isLoading ? 'Signing In...' : 'Login as Admin'}
                 </Button>
               </form>
             </Form>
             
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center">
               <p className="text-xs text-gray-500">
                 Secure access to administrative functions
               </p>
