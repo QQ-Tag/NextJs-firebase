@@ -11,8 +11,8 @@ const GoogleIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 48 48"
-    width="20px"
-    height="20px"
+    width="16px"
+    height="16px"
   >
     <path
       fill="#EA4335"
@@ -106,16 +106,16 @@ export function GoogleLoginButton() {
   return (
     <Button
       variant="outline"
-      className="w-full h-12 border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5"
+      className="w-full h-9 border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 text-xs"
       onClick={handleGoogleLogin}
       disabled={isLoading}
     >
       {isLoading ? (
-        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+        <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
       ) : (
         <GoogleIcon />
       )}
-      <span className="ml-2 font-medium">
+      <span className="ml-1.5 font-medium">
         {isLoading ? 'Signing in...' : 'Continue with Google'}
       </span>
     </Button>

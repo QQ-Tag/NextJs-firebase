@@ -87,7 +87,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
   }
 
   return (
-    <div className="w-full max-w-md mx-4 relative">
+    <div className="w-full max-w-sm mx-4 relative">
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-green-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
@@ -98,43 +98,43 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
         {/* Gradient border effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-blue-600 to-purple-600 rounded-xl blur opacity-75"></div>
         <div className="relative bg-white rounded-xl m-1">
-          <CardHeader className="text-center pb-6 pt-8 px-8">
-            <div className="mx-auto mb-4 relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                <UserPlus className="h-8 w-8 text-white" />
+          <CardHeader className="text-center pb-4 pt-6 px-6">
+            <div className="mx-auto mb-3 relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                <UserPlus className="h-6 w-6 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                <Sparkles className="h-3 w-3 text-white" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                <Sparkles className="h-2 w-2 text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <CardTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               Join QQ Tag
             </CardTitle>
-            <CardDescription className="text-gray-600 mt-2">
-              Create your account and start protecting your belongings
+            <CardDescription className="text-gray-600 text-xs">
+              Create your account and protect your belongings
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="px-8 pb-8">
+          <CardContent className="px-6 pb-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                        <User className="h-4 w-4 text-green-500" />
-                        Full Name
-                      </FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">Full Name</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="John Doe" 
-                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
-                          {...field} 
-                        />
+                        <div className="relative">
+                          <User className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Input 
+                            placeholder="John Doe" 
+                            className="pl-8 h-9 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-xs"
+                            {...field} 
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -143,18 +143,18 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-blue-500" />
-                        Email Address
-                      </FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">Email Address</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="you@example.com" 
-                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
-                          {...field} 
-                        />
+                        <div className="relative">
+                          <Mail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Input 
+                            placeholder="you@example.com" 
+                            className="pl-8 h-9 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-xs"
+                            {...field} 
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -163,19 +163,19 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                        <Lock className="h-4 w-4 text-purple-500" />
-                        Password
-                      </FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">Password</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="password" 
-                          placeholder="••••••••" 
-                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
-                          {...field} 
-                        />
+                        <div className="relative">
+                          <Lock className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Input 
+                            type="password" 
+                            placeholder="••••••••" 
+                            className="pl-8 h-9 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-xs"
+                            {...field} 
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -184,18 +184,18 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-indigo-500" />
-                        Phone Number (Optional)
-                      </FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">Phone (Optional)</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., +1 123 456 7890" 
-                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
-                          {...field} 
-                        />
+                        <div className="relative">
+                          <Phone className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Input 
+                            placeholder="e.g., +1 123 456 7890" 
+                            className="pl-8 h-9 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-xs"
+                            {...field} 
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -204,47 +204,47 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
                   name="whatsapp"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4 text-green-600" />
-                        WhatsApp Number (Optional)
-                      </FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">WhatsApp (Optional)</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., +1 123 456 7890" 
-                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
-                          {...field} 
-                        />
+                        <div className="relative">
+                          <MessageSquare className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Input 
+                            placeholder="e.g., +1 123 456 7890" 
+                            className="pl-8 h-9 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg text-xs"
+                            {...field} 
+                          />
+                        </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
+                  className="w-full h-9 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 text-xs" 
                   disabled={isLoading}
                 >
-                  {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                  {isLoading && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
                   {isLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </form>
             </Form>
             
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-600">
                 Already have an account?{' '}
-                <Button variant="link" asChild className="p-0 h-auto text-blue-600 hover:text-blue-700 font-semibold">
+                <Button variant="link" asChild className="p-0 h-auto text-blue-600 hover:text-blue-700 font-semibold text-xs">
                   <Link href="/login">Sign In</Link>
                 </Button>
               </p>
             </div>
             
-            <div className="relative my-6">
+            <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-4 text-gray-500 font-medium">
+                <span className="bg-white px-3 text-gray-500 font-medium">
                   Or continue with
                 </span>
               </div>
@@ -252,10 +252,10 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
             
             <GoogleLoginButton />
             
-            <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-              <p className="text-sm text-green-700 font-medium mb-1">🚀 Get Started</p>
-              <p className="text-sm text-green-600">
-                Join thousands of users protecting their belongings with QQ Tag.
+            <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+              <p className="text-xs text-green-700 font-medium mb-1">🚀 Get Started</p>
+              <p className="text-xs text-green-600">
+                Join thousands protecting their belongings with QQ Tag.
               </p>
             </div>
           </CardContent>
