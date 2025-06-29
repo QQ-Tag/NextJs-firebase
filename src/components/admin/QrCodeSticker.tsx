@@ -1,4 +1,3 @@
-
 'use client';
 import type { StickerSize } from '@/lib/types';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -12,44 +11,57 @@ interface QrCodeStickerProps {
 }
 
 export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps) {
-  // Adjusted styles for better proportions and auto-height
-  // Padding: pt & px define top/side black borders. pb defines bottom black border.
-  // Text margin-top (mt) defines space between QR white box and text.
+  // Professional sticker design with better proportions and modern styling
   const sizeStyles = {
-    'Extra Small': { // QR 32px. White box area ~36x36. Text height ~7px.
-      stickerBox: 'w-[3rem] pt-[5px] px-[3px] pb-[5px]', // Approx: Top/Side border 3px. Bottom band for text ~12px (mt 2px + text 7px + border_below_text 3px)
-      qrBox: 'p-0.5 rounded-sm',      // 2px white padding around QR pattern
-      qrSize: 30, // Slightly smaller to fit with padding
-      text: 'text-[0.35rem] mt-[2px]',
-      idText: 'text-[0.4rem] mt-0.5'
+    'Extra Small': {
+      stickerBox: 'w-20 h-20', // 80px x 80px
+      qrContainer: 'w-14 h-14', // 56px x 56px
+      qrSize: 52, // QR code size
+      textSize: 'text-[0.4rem]', // 6.4px
+      idSize: 'text-[0.35rem]', // 5.6px
+      padding: 'p-1',
+      borderRadius: 'rounded-lg',
+      gap: 'gap-0.5'
     },
-    'Small': { // QR 50px. White box area ~58x58. Text height ~9px.
-      stickerBox: 'w-[4.5rem] pt-2 px-1 pb-1.5', // Top/Side border 4px. Bottom band for text ~18px (mt 4px + text 9px + border_below_text 5px)
-      qrBox: 'p-1 rounded',           // 4px white padding
-      qrSize: 48,
-      text: 'text-[0.55rem] mt-1',    // 4px margin-top
-      idText: 'text-[0.5rem] mt-1'
+    'Small': {
+      stickerBox: 'w-24 h-24', // 96px x 96px
+      qrContainer: 'w-16 h-16', // 64px x 64px
+      qrSize: 60,
+      textSize: 'text-[0.5rem]', // 8px
+      idSize: 'text-[0.45rem]', // 7.2px
+      padding: 'p-1.5',
+      borderRadius: 'rounded-lg',
+      gap: 'gap-1'
     },
-    'Medium': { // QR 72px. White box area ~84x84. Text height ~11px.
-      stickerBox: 'w-[6rem] pt-2.5 px-1.5 pb-2.5', // Top/Side border 6px. Bottom band for text ~25px (mt 6px + text 11px + border_below_text 8px)
-      qrBox: 'p-1.5 rounded-md',      // 6px white padding
-      qrSize: 70,
-      text: 'text-[0.65rem] mt-1.5',  // 6px margin-top
-      idText: 'text-[0.6rem] mt-1'
+    'Medium': {
+      stickerBox: 'w-32 h-32', // 128px x 128px
+      qrContainer: 'w-22 h-22', // 88px x 88px
+      qrSize: 84,
+      textSize: 'text-[0.6rem]', // 9.6px
+      idSize: 'text-[0.5rem]', // 8px
+      padding: 'p-2',
+      borderRadius: 'rounded-xl',
+      gap: 'gap-1'
     },
-    'Large': { // QR 90px. White box area ~106x106. Text height ~12px.
-      stickerBox: 'w-[7.5rem] pt-3 px-2 pb-3', // Top/Side border 8px. Bottom band for text ~30px (mt 8px + text 12px + border_below_text 10px)
-      qrBox: 'p-2 rounded-md',        // 8px white padding
-      qrSize: 88,
-      text: 'text-xs mt-2',           // 8px margin-top
-      idText: 'text-[0.7rem] mt-1.5'
-    },
-    'Extra Large': { // QR 110px. White box area ~126x126. Text height ~14px.
-      stickerBox: 'w-[9rem] pt-3.5 px-2.5 pb-4', // Top/Side border 10px. Bottom band for text ~38px (mt 10px + text 14px + border_below_text 14px)
-      qrBox: 'p-2 rounded-lg',        // 8px white padding
+    'Large': {
+      stickerBox: 'w-40 h-40', // 160px x 160px
+      qrContainer: 'w-28 h-28', // 112px x 112px
       qrSize: 108,
-      text: 'text-sm mt-2.5',        // 10px margin-top
-      idText: 'text-xs mt-1.5'
+      textSize: 'text-xs', // 12px
+      idSize: 'text-[0.6rem]', // 9.6px
+      padding: 'p-2.5',
+      borderRadius: 'rounded-xl',
+      gap: 'gap-1.5'
+    },
+    'Extra Large': {
+      stickerBox: 'w-48 h-48', // 192px x 192px
+      qrContainer: 'w-32 h-32', // 128px x 128px
+      qrSize: 124,
+      textSize: 'text-sm', // 14px
+      idSize: 'text-xs', // 12px
+      padding: 'p-3',
+      borderRadius: 'rounded-2xl',
+      gap: 'gap-2'
     },
   };
 
@@ -57,34 +69,61 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
   const qrUrl = typeof window !== 'undefined' ? `${window.location.origin}/qr/${uniqueId}` : `/qr/${uniqueId}`;
 
   return (
-    <div
-      className={cn("inline-flex flex-col items-center font-sans")}
-      style={{ breakInside: 'avoid-page' }}
-    >
-      {/* The black sticker part. Removed fixed height, justify-center for flex might be better if height is auto based on content + padding. */}
+    <div className="inline-flex flex-col items-center font-sans" style={{ breakInside: 'avoid-page' }}>
+      {/* Main Sticker Container */}
       <div className={cn(
-        "bg-black text-white rounded-lg flex flex-col items-center shadow-md print-bg-exact",
-        currentStyle.stickerBox // This now includes asymmetric padding and width, but no fixed height.
+        "relative flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black shadow-2xl print-bg-exact border-2 border-gray-800",
+        currentStyle.stickerBox,
+        currentStyle.borderRadius,
+        currentStyle.padding,
+        currentStyle.gap
       )}>
-        {/* White area for QR code */}
-        <div className={cn("bg-white rounded-md print-bg-exact", currentStyle.qrBox)}>
+        {/* QR Code Container with white background */}
+        <div className={cn(
+          "bg-white rounded-lg shadow-inner border border-gray-200 flex items-center justify-center print-bg-exact",
+          currentStyle.qrContainer
+        )}>
           <QRCodeCanvas
             value={qrUrl}
             size={currentStyle.qrSize}
-            bgColor={"#FFFFFF"}
-            fgColor={"#000000"}
-            level={"Q"}
-            // includeMargin={true} // qrcode.react's includeMargin adds its own margin, better to control with padding on qrBox
+            bgColor="#FFFFFF"
+            fgColor="#000000"
+            level="M"
+            includeMargin={false}
+            style={{
+              width: '100%',
+              height: '100%',
+              maxWidth: `${currentStyle.qrSize}px`,
+              maxHeight: `${currentStyle.qrSize}px`
+            }}
           />
         </div>
-        {/* "Scan to Return" text */}
-        <p className={cn("font-semibold text-center", currentStyle.text)}>{text}</p>
+        
+        {/* Text Label */}
+        <div className="text-center">
+          <p className={cn(
+            "font-bold text-white leading-tight tracking-wide uppercase print-bg-exact",
+            currentStyle.textSize
+          )}>
+            {text}
+          </p>
+        </div>
+        
+        {/* Brand/Logo area - small QQ Tag branding */}
+        <div className="absolute top-1 right-1 opacity-60">
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+        </div>
       </div>
 
       {/* QR ID below the sticker */}
-      <p className={cn("font-mono text-center text-neutral-800 dark:text-neutral-300", currentStyle.idText)}>
-        {uniqueId}
-      </p>
+      <div className="mt-1 text-center">
+        <p className={cn(
+          "font-mono font-medium text-gray-700 dark:text-gray-400 tracking-wider",
+          currentStyle.idSize
+        )}>
+          {uniqueId}
+        </p>
+      </div>
     </div>
   );
 }
