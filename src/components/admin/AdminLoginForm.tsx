@@ -44,13 +44,25 @@ export function AdminLoginForm() {
     try {
       const success = await adminLogin(values.username, values.password);
       if (success) {
-        toast({ title: "Admin Login Successful", description: "Redirecting to admin dashboard..." });
+        toast({ 
+          variant: "success",
+          title: "Admin Access Granted", 
+          description: "Successfully logged in as administrator. Redirecting to dashboard..." 
+        });
         router.push('/admin/dashboard');
       } else {
-        toast({ variant: "destructive", title: "Admin Login Failed", description: "Invalid username or password." });
+        toast({ 
+          variant: "destructive", 
+          title: "Access Denied", 
+          description: "Invalid administrator credentials. Please check your username and password." 
+        });
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Login Error", description: error.message || "An unexpected error occurred." });
+      toast({ 
+        variant: "destructive", 
+        title: "Login Error", 
+        description: error.message || "An unexpected error occurred during admin login." 
+      });
     } finally {
       setIsLoading(false);
     }

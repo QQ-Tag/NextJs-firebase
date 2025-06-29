@@ -82,16 +82,17 @@ export function ProfileForm() {
     try {
       await updateCurrentUser(values);
       toast({ 
+        variant: "success",
         title: "Profile Updated Successfully!", 
-        description: "Your profile information has been saved.",
-        duration: 3000,
+        description: "Your profile information has been saved and applied to all your QR codes.",
+        duration: 4000,
       });
       setHasChanges(false);
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
-        title: "Update Failed", 
-        description: error.message || "Could not update your profile. Please try again." 
+        title: "Failed to Update Profile", 
+        description: error.message || "Could not update your profile. Please check your connection and try again." 
       });
     } finally {
       setIsLoading(false);
@@ -293,6 +294,11 @@ export function ProfileForm() {
                             whatsapp: currentUser.whatsapp || '',
                           });
                           setHasChanges(false);
+                          toast({
+                            variant: "info",
+                            title: "Changes Reset",
+                            description: "All changes have been reset to your current profile information."
+                          });
                         }
                       }}
                       className="h-12 px-8 hover:bg-gray-50 rounded-xl"

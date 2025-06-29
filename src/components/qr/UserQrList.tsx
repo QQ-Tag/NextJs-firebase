@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Link2Off, Loader2, Info, QrCode, MoreVertical } from 'lucide-react';
+import { Trash2, Link2Off, Loader2, Info, QrCode, AlertTriangle, CheckCircle } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,14 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import Image from 'next/image';
 
 export function UserQrList() {
   const { currentUser, loading: authLoading } = useAuth();
@@ -61,13 +54,25 @@ export function UserQrList() {
     try {
       const success = await unlinkQrCode(qrId, currentUser.id);
       if (success) {
-        toast({ title: "QR Unlinked", description: `QR ID ${qrId} has been unlinked from your account.` });
+        toast({ 
+          variant: "success",
+          title: "QR Code Unlinked Successfully", 
+          description: `QR ID ${qrId} has been unlinked from your account and is now available for others to claim.` 
+        });
         fetchQrs();
       } else {
-        toast({ variant: "destructive", title: "Unlink Failed", description: "Could not unlink this QR code." });
+        toast({ 
+          variant: "destructive", 
+          title: "Failed to Unlink QR Code", 
+          description: "Could not unlink this QR code. Please try again or contact support if the problem persists." 
+        });
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Error", description: error.message || "An unexpected error occurred." });
+      toast({ 
+        variant: "destructive", 
+        title: "Unlink Error", 
+        description: error.message || "An unexpected error occurred while unlinking the QR code." 
+      });
     } finally {
       setActionLoading(prev => ({ ...prev, [qrId]: false }));
     }
@@ -79,13 +84,25 @@ export function UserQrList() {
     try {
       const success = await deleteQrCode(qrId, currentUser.id);
       if (success) {
-        toast({ title: "QR Deleted", description: `QR ID ${qrId} has been deleted and is now unusable.` });
+        toast({ 
+          variant: "warning",
+          title: "QR Code Deleted Permanently", 
+          description: `QR ID ${qrId} has been permanently deleted and is now completely unusable.` 
+        });
         fetchQrs();
       } else {
-        toast({ variant: "destructive", title: "Delete Failed", description: "Could not delete this QR code." });
+        toast({ 
+          variant: "destructive", 
+          title: "Failed to Delete QR Code", 
+          description: "Could not delete this QR code. Please try again or contact support if the problem persists." 
+        });
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Error", description: error.message || "An unexpected error occurred." });
+      toast({ 
+        variant: "destructive", 
+        title: "Delete Error", 
+        description: error.message || "An unexpected error occurred while deleting the QR code." 
+      });
     } finally {
       setActionLoading(prev => ({ ...prev, [qrId]: false }));
     }
@@ -145,8 +162,9 @@ export function UserQrList() {
           <Button 
             onClick={() => { 
               toast({ 
-                title: "How to link QR codes", 
-                description: "Find an unclaimed QR sticker and scan it with your phone's camera!" 
+                variant: "info",
+                title: "How to Link QR Codes", 
+                description: "Find an unclaimed QR sticker and scan it with your phone's camera to link it to your account!" 
               }); 
             }}
             className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
@@ -217,18 +235,22 @@ export function UserQrList() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                          <Link2Off className="h-6 w-6 text-orange-600" />
+                        </div>
                         <AlertDialogTitle>Unlink QR Code {qr.id}?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will make the QR code unclaimed and available for others to link. Are you sure?
+                          This will disconnect the QR code from your account, making it available for others to claim. 
+                          You can always link it again later if you find it.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>Keep Linked</AlertDialogCancel>
                         <AlertDialogAction 
                           onClick={() => handleUnlink(qr.id)} 
                           className="bg-orange-500 hover:bg-orange-600"
                         >
-                          Unlink
+                          Yes, Unlink
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -252,15 +274,22 @@ export function UserQrList() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Delete QR Code {qr.id}?</AlertDialogTitle>
+                        <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                          <AlertTriangle className="h-6 w-6 text-red-600" />
+                        </div>
+                        <AlertDialogTitle>Delete QR Code {qr.id} Forever?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action is permanent. The QR code will become unusable. Are you sure?
+                          <strong>This action cannot be undone.</strong> The QR code will be permanently deleted and become completely unusable. 
+                          No one will be able to scan or claim this QR code ever again.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(qr.id)}>
-                          Delete Permanently
+                        <AlertDialogAction 
+                          onClick={() => handleDelete(qr.id)}
+                          className="bg-red-500 hover:bg-red-600"
+                        >
+                          Delete Forever
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -312,18 +341,22 @@ export function UserQrList() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
+                            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                              <Link2Off className="h-6 w-6 text-orange-600" />
+                            </div>
                             <AlertDialogTitle>Unlink QR Code {qr.id}?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              This will make the QR code unclaimed and available for others to link. Are you sure?
+                              This will disconnect the QR code from your account, making it available for others to claim. 
+                              You can always link it again later if you find it.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel>Keep Linked</AlertDialogCancel>
                             <AlertDialogAction 
                               onClick={() => handleUnlink(qr.id)} 
                               className="bg-orange-500 hover:bg-orange-600"
                             >
-                              Unlink
+                              Yes, Unlink
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -346,15 +379,22 @@ export function UserQrList() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Delete QR Code {qr.id}?</AlertDialogTitle>
+                            <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                              <AlertTriangle className="h-6 w-6 text-red-600" />
+                            </div>
+                            <AlertDialogTitle>Delete QR Code {qr.id} Forever?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              This action is permanent. The QR code will become unusable. Are you sure?
+                              <strong>This action cannot be undone.</strong> The QR code will be permanently deleted and become completely unusable. 
+                              No one will be able to scan or claim this QR code ever again.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDelete(qr.id)}>
-                              Delete Permanently
+                            <AlertDialogAction 
+                              onClick={() => handleDelete(qr.id)}
+                              className="bg-red-500 hover:bg-red-600"
+                            >
+                              Delete Forever
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>

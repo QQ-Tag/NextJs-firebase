@@ -48,16 +48,25 @@ export function BatchGeneratorForm({ onBatchCreated }: BatchGeneratorFormProps) 
       const newBatch = await generateQrBatch(values.batchName, values.quantity);
       if (newBatch) {
         toast({
+          variant: "success",
           title: "Batch Generated Successfully!",
-          description: `Batch "${newBatch.batchName}" (${newBatch.startId} - ${newBatch.endId}) created.`,
+          description: `Created batch "${newBatch.batchName}" with ${newBatch.quantity} QR codes (${newBatch.startId} - ${newBatch.endId}).`,
         });
         form.reset();
         onBatchCreated();
       } else {
-        toast({ variant: "destructive", title: "Batch Generation Failed", description: "Could not generate the batch." });
+        toast({ 
+          variant: "destructive", 
+          title: "Failed to Generate Batch", 
+          description: "Could not generate the QR code batch. Please try again or contact support." 
+        });
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Error", description: error.message || "An unexpected error occurred." });
+      toast({ 
+        variant: "destructive", 
+        title: "Batch Generation Error", 
+        description: error.message || "An unexpected error occurred while generating the batch." 
+      });
     } finally {
       setIsLoading(false);
     }

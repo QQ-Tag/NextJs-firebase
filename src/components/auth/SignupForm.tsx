@@ -72,15 +72,27 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
         whatsapp: values.whatsapp || undefined,
       });
       if (user) {
-        toast({ title: 'Account Created Successfully', description: `Welcome to QQ Tag, ${user.name}!` });
+        toast({ 
+          variant: "success",
+          title: 'Account Created Successfully!', 
+          description: `Welcome to QQ Tag, ${user.name}! Your account is ready to use.` 
+        });
         if (redirect && typeof window !== 'undefined') {
           window.location.href = redirect;
         }
       } else {
-        toast({ variant: 'destructive', title: 'Signup Failed', description: 'Could not create your account. Please try again.' });
+        toast({ 
+          variant: 'destructive', 
+          title: 'Signup Failed', 
+          description: 'Could not create your account. Please try again or contact support.' 
+        });
       }
     } catch (error: any) {
-      toast({ variant: 'destructive', title: 'Signup Error', description: error.message || 'An unexpected error occurred.' });
+      toast({ 
+        variant: 'destructive', 
+        title: 'Signup Error', 
+        description: error.message || 'An unexpected error occurred during account creation.' 
+      });
     } finally {
       setIsLoading(false);
     }

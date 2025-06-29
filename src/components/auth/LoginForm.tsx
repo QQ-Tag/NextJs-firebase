@@ -56,15 +56,27 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
     try {
       const user = await login(values.email, values.password);
       if (user) {
-        toast({ title: 'Login Successful', description: `Welcome back, ${user.name}!` });
+        toast({ 
+          variant: "success",
+          title: 'Welcome Back!', 
+          description: `Successfully logged in as ${user.name}. Redirecting to your dashboard...` 
+        });
         if (redirect && typeof window !== 'undefined') {
           window.location.href = redirect;
         }
       } else {
-        toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
+        toast({ 
+          variant: 'destructive', 
+          title: 'Login Failed', 
+          description: 'Invalid email or password. Please check your credentials and try again.' 
+        });
       }
     } catch (error: any) {
-      toast({ variant: 'destructive', title: 'Login Error', description: error.message || 'An unexpected error occurred.' });
+      toast({ 
+        variant: 'destructive', 
+        title: 'Login Error', 
+        description: error.message || 'An unexpected error occurred. Please try again.' 
+      });
     } finally {
       setIsLoading(false);
     }
