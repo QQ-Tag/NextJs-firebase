@@ -9,7 +9,7 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 3
-const TOAST_REMOVE_DELAY = 5000
+const TOAST_REMOVE_DELAY = 5000 // 5 seconds auto-close
 
 type ToasterToast = ToastProps & {
   id: string
@@ -17,6 +17,7 @@ type ToasterToast = ToastProps & {
   description?: React.ReactNode
   action?: ToastActionElement
   variant?: 'default' | 'destructive' | 'success' | 'warning' | 'info'
+  duration?: number // Allow custom duration per toast
 }
 
 const actionTypes = {
@@ -143,7 +144,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ variant = "default", ...props }: Toast) {
+function toast({ variant = "default", duration, ...props }: Toast) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -159,12 +160,18 @@ function toast({ variant = "default", ...props }: Toast) {
       ...props,
       id,
       variant,
+      duration: duration || 5000, // Default 5 seconds
       open: true,
       onOpenChange: (open) => {
         if (!open) dismiss()
       },
     },
   })
+
+  // Auto-dismiss after specified duration
+  const autoDismissTimeout = setTimeout(() => {
+    dismiss()
+  }, duration || 5000)
 
   return {
     id: id,
