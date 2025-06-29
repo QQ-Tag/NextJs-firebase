@@ -3,7 +3,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
-import { PageContainer } from '@/components/shared/PageContainer';
 import { BatchGeneratorForm } from '@/components/admin/BatchGeneratorForm';
 import { QrCodeTable } from '@/components/admin/QrCodeTable';
 import { BatchList } from '@/components/admin/BatchList';
@@ -11,7 +10,7 @@ import { getAllBatches, getAllQrCodes } from '@/lib/qrService';
 import type { QRBatch, QRCode, User } from '@/lib/types';
 import { Loader2, ShieldAlert, BarChart3, QrCode, Package, Plus } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { users as mockUsers } from '@/lib/mockData';
 
 export default function AdminDashboardPage() {
@@ -51,7 +50,7 @@ export default function AdminDashboardPage() {
 
   if (authLoading || dataLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-0 m-0">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Loading admin dashboard...</p>
@@ -62,7 +61,7 @@ export default function AdminDashboardPage() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4 m-0">
         <Card className="w-full max-w-md text-center shadow-xl border-0">
           <CardContent className="pt-8">
             <ShieldAlert className="h-16 w-16 text-red-500 mx-auto mb-4" />
@@ -82,8 +81,8 @@ export default function AdminDashboardPage() {
   const totalBatches = batches.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <PageContainer className="py-6 sm:py-8 space-y-6 sm:space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-0 m-0">
+      <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Header Section */}
         <div className="text-center sm:text-left">
           <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
@@ -190,7 +189,7 @@ export default function AdminDashboardPage() {
             </TabsContent>
           </Tabs>
         </Card>
-      </PageContainer>
+      </div>
     </div>
   );
 }

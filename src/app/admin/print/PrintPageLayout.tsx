@@ -31,7 +31,7 @@ export default function PrintPageLayout({ children, title }: PrintPageLayoutProp
         }
       `}</style>
       
-      <div className="container mx-auto px-4 py-6 lg:py-8">
+      <div className="container mx-auto px-4 py-6 lg:py-8 m-0">
         <div className="no-print mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>

@@ -1,4 +1,3 @@
-//src/app/admin/print/qr/[qrId]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,11 +6,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getPrintableQrData, getQrCodeById } from '@/lib/qrService';
 import type { PrintableQRInfo, StickerSize, QRCode } from '@/lib/types';
 import { STICKER_SIZES } from '@/lib/types';
-import { PageContainer } from '@/components/shared/PageContainer';
 import { PrintOptions } from '@/components/admin/PrintOptions';
 import { QrCodeSticker } from '@/components/admin/QrCodeSticker';
 import PrintPageLayout from '../../PrintPageLayout';
-import { Loader2, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Loader2, AlertTriangle, ShieldAlert, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -28,18 +26,15 @@ export default function PrintSingleQrPage() {
 
   useEffect(() => {
     if (authLoading) {
-      // Wait for auth to resolve; isLoading is initially true.
       return;
     }
 
-    // Auth is resolved
     if (!isAdmin) {
       router.push('/admin/login?redirect=/admin/print/qr/' + qrId);
       setIsLoading(false);
       return;
     }
 
-    // Auth is resolved, user is admin
     if (qrId) {
       const fetchData = async () => {
         setIsLoading(true);
@@ -51,7 +46,6 @@ export default function PrintSingleQrPage() {
             setPrintableQr(data);
           } else {
             setPrintableQr(null);
-            // No need to setQrCode(null) again if fetchedQr is null
           }
         } catch (error) {
           console.error("Error fetching QR print data:", error);
@@ -63,7 +57,6 @@ export default function PrintSingleQrPage() {
       };
       fetchData();
     } else {
-      // Admin, but no qrId
       setIsLoading(false);
       setQrCode(null);
       setPrintableQr(null);
@@ -91,67 +84,86 @@ export default function PrintSingleQrPage() {
 
   if (authLoading || isLoading) {
     return (
-      <PageContainer className="flex items-center justify-center min-h-[calc(100vh-8rem)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </PageContainer>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-0 m-0">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading QR code data...</p>
+        </div>
+      </div>
     );
   }
   
-  if (!isAdmin) { // Should be caught by useEffect, but as safeguard
-     return (
-      <PageContainer className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] text-center">
-        <ShieldAlert className="h-16 w-16 text-destructive mb-4" />
-        <h1 className="text-2xl font-bold">Access Denied</h1>
-        <p className="text-muted-foreground">Redirecting to login...</p>
-      </PageContainer>
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4 m-0">
+        <div className="text-center">
+          <ShieldAlert className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
+          <p className="text-gray-600">Redirecting to login...</p>
+        </div>
+      </div>
     );
   }
 
   if (!qrCode || !printableQr) {
     return (
-      <PrintPageLayout title="Error: QR Code Not Found">
-        <div className="text-center py-10">
-          <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-          <p className="text-xl">The requested QR code (ID: {qrId || 'N/A'}) could not be found or is not printable.</p>
-           <Button asChild className="mt-6">
-            <Link href="/admin/dashboard">Back to Admin Dashboard</Link>
-          </Button>
-        </div>
-      </PrintPageLayout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-0 m-0">
+        <PrintPageLayout title="Error: QR Code Not Found">
+          <div className="text-center py-20">
+            <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-6" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">QR Code Not Found</h2>
+            <p className="text-xl text-gray-600 mb-8">The requested QR code (ID: {qrId || 'N/A'}) could not be found or is not printable.</p>
+            <Button asChild className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+              <Link href="/admin/dashboard" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Admin Dashboard
+              </Link>
+            </Button>
+          </div>
+        </PrintPageLayout>
+      </div>
     );
   }
 
   return (
-    <PrintPageLayout title={`Print QR Code: ${printableQr.id}`}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1 no-print">
-          <PrintOptions
-            availableSizes={STICKER_SIZES}
-            selectedSizes={[selectedSize]} 
-            onSizeChange={() => {}} 
-            onSingleSizeChange={handleSizeChange}
-            defaultSelectedSize={selectedSize}
-            onPrint={handlePrintAction}
-            allowMultipleSizes={false}
-          />
-        </div>
-        <div id="printable-area" className="md:col-span-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 text-center print:mt-8">
-            Printing QR Code: {printableQr.id}
-          </h2>
-           <p className="text-sm text-muted-foreground text-center mb-6 print:mb-2">
-            Selected Size: {selectedSize}
-          </p>
-          <div className="flex justify-center items-center p-2 border border-gray-300 rounded min-h-[200px]">
-            <QrCodeSticker 
-              qrId={printableQr.id} 
-              uniqueId={printableQr.uniqueId} 
-              size={selectedSize} 
-              text={printableQr.text} 
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-0 m-0">
+      <PrintPageLayout title={`Print QR Code: ${printableQr.id}`}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="lg:col-span-1 no-print">
+            <PrintOptions
+              availableSizes={STICKER_SIZES}
+              selectedSizes={[selectedSize]} 
+              onSizeChange={() => {}} 
+              onSingleSizeChange={handleSizeChange}
+              defaultSelectedSize={selectedSize}
+              onPrint={handlePrintAction}
+              allowMultipleSizes={false}
             />
           </div>
+          
+          <div id="printable-area" className="lg:col-span-2">
+            <div className="bg-white rounded-2xl shadow-xl border-0 p-6 lg:p-8">
+              <div className="text-center mb-8 print:mt-8">
+                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+                  QR Code: {printableQr.id}
+                </h2>
+                <p className="text-sm text-gray-500 print:mb-2">
+                  Selected Size: {selectedSize}
+                </p>
+              </div>
+              
+              <div className="flex justify-center items-center p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 min-h-[200px]">
+                <QrCodeSticker 
+                  qrId={printableQr.id} 
+                  uniqueId={printableQr.uniqueId} 
+                  size={selectedSize} 
+                  text={printableQr.text} 
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </PrintPageLayout>
+      </PrintPageLayout>
+    </div>
   );
 }
