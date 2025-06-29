@@ -11,14 +11,15 @@ interface QrCodeStickerProps {
 }
 
 export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps) {
-  // Clean, professional sticker design with industry-standard proportions
+  // Design based on reference image: black borders on left, top, right + "Scan to Return" text below
   const sizeStyles = {
     'Extra Small': {
       container: 'w-16 h-20', // 64px x 80px
       qrSize: 48,
       textSize: 'text-[6px]',
       idSize: 'text-[5px]',
-      padding: 'p-1',
+      borderWidth: 'border-l-2 border-t-2 border-r-2',
+      padding: 'pt-1 px-1 pb-2',
       gap: 'gap-0.5'
     },
     'Small': {
@@ -26,7 +27,8 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
       qrSize: 60,
       textSize: 'text-[7px]',
       idSize: 'text-[6px]',
-      padding: 'p-1.5',
+      borderWidth: 'border-l-2 border-t-2 border-r-2',
+      padding: 'pt-1.5 px-1.5 pb-2',
       gap: 'gap-0.5'
     },
     'Medium': {
@@ -34,7 +36,8 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
       qrSize: 72,
       textSize: 'text-[8px]',
       idSize: 'text-[7px]',
-      padding: 'p-2',
+      borderWidth: 'border-l-2 border-t-2 border-r-2',
+      padding: 'pt-2 px-2 pb-2',
       gap: 'gap-1'
     },
     'Large': {
@@ -42,7 +45,8 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
       qrSize: 84,
       textSize: 'text-[9px]',
       idSize: 'text-[8px]',
-      padding: 'p-2',
+      borderWidth: 'border-l-3 border-t-3 border-r-3',
+      padding: 'pt-2 px-2 pb-3',
       gap: 'gap-1'
     },
     'Extra Large': {
@@ -50,7 +54,8 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
       qrSize: 96,
       textSize: 'text-[10px]',
       idSize: 'text-[9px]',
-      padding: 'p-2.5',
+      borderWidth: 'border-l-3 border-t-3 border-r-3',
+      padding: 'pt-2.5 px-2.5 pb-3',
       gap: 'gap-1'
     },
   };
@@ -60,12 +65,12 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
 
   return (
     <div className="inline-flex flex-col items-center font-sans" style={{ breakInside: 'avoid-page' }}>
-      {/* Main Sticker - Clean white design with black border */}
+      {/* Main Sticker - White background with black borders on left, top, right only */}
       <div className={cn(
-        "bg-white border-2 border-black flex flex-col items-center justify-center print-bg-exact",
+        "bg-white border-black flex flex-col items-center justify-between print-bg-exact",
         currentStyle.container,
+        currentStyle.borderWidth, // Only left, top, right borders
         currentStyle.padding,
-        currentStyle.gap
       )}>
         {/* QR Code */}
         <div className="bg-white flex items-center justify-center">
@@ -79,7 +84,7 @@ export function QrCodeSticker({ qrId, uniqueId, size, text }: QrCodeStickerProps
           />
         </div>
         
-        {/* Text Label */}
+        {/* "Scan to Return" Text at bottom */}
         <div className="text-center">
           <p className={cn(
             "font-bold text-black leading-tight tracking-wide uppercase",
