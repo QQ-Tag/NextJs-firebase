@@ -16,7 +16,7 @@ interface AuthContextType {
   logout: () => void;
   adminLogin: (username: string, password: string) => Promise<boolean>;
   googleLogin: (googleToken: string) => Promise<AuthUser | null>;
-  updateCurrentUser: (updatedUser: Partial<AuthUser>) => void;
+  updateCurrentUser: (updatedUser: Partial<AuthUser>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -241,11 +241,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push('/');
   };
 
-  const updateCurrentUser = (updatedFields: Partial<AuthUser>) => {
-    if (currentUser) {
-      const updatedUser = { ...currentUser, ...updatedFields };
+  // Updated updateCurrentUser function that calls backend API
+  const updateCurrentUser = async (updatedFields: Partial<AuthUser>): Promise<void> => {
+    if (!currentUser) {
+      throw new Error('User not authenticated');
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: currentUser.id,
+          ...updatedFields
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update profile');
+      }
+
+      const data = await response.json();
+      const updatedUser = data.user;
+
+      // Update local state and localStorage with the response from backend
       setCurrentUser(updatedUser);
       localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    } catch (error) {
+      throw error;
     }
   };
 
