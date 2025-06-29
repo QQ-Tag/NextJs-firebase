@@ -11,8 +11,8 @@ const GoogleIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 48 48"
-    width="24px"
-    height="24px"
+    width="20px"
+    height="20px"
   >
     <path
       fill="#EA4335"
@@ -63,7 +63,6 @@ export function GoogleLoginButton() {
                 title: 'Login Successful',
                 description: `Welcome, ${user.name}!`,
               });
-              // Redirect handled in AuthContext
             }
           } catch (error: any) {
             toast({
@@ -77,7 +76,6 @@ export function GoogleLoginButton() {
         },
       });
 
-      // Create a temporary button and click it
       const tempDiv = document.createElement('div');
       document.body.appendChild(tempDiv);
 
@@ -86,7 +84,6 @@ export function GoogleLoginButton() {
         size: 'large',
       });
 
-      // Trigger click on the Google button
       setTimeout(() => {
         const googleBtn = tempDiv.querySelector(
           'div[role="button"]'
@@ -109,17 +106,17 @@ export function GoogleLoginButton() {
   return (
     <Button
       variant="outline"
-      className="w-full"
+      className="w-full h-12 border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5"
       onClick={handleGoogleLogin}
       disabled={isLoading}
     >
       {isLoading ? (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
       ) : (
         <GoogleIcon />
       )}
-      <span className="ml-2">
-        {isLoading ? 'Signing in...' : 'Sign in with Google'}
+      <span className="ml-2 font-medium">
+        {isLoading ? 'Signing in...' : 'Continue with Google'}
       </span>
     </Button>
   );

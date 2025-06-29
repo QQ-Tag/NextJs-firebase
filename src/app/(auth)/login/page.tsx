@@ -1,10 +1,9 @@
 import { LoginForm } from '@/components/auth/LoginForm';
-import { PageContainer } from '@/components/shared/PageContainer';
 
 export default function LoginPage() {
   return (
-    <PageContainer className="flex min-h-[calc(100vh-theme(spacing.16))] flex-col items-center justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-0 m-0">
       <LoginForm />
-    </PageContainer>
+    </div>
   );
 }
