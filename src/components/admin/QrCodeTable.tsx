@@ -1,14 +1,12 @@
-// src/components/admin/QrCodeTable.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import type { QRCode, User, QRBatch } from '@/lib/types';
-import { getAllQrCodes, getOwnerByUserId, getBatchById } from '@/lib/qrService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Printer, Loader2, Search, Filter, QrCodeIcon } from 'lucide-react';
+import { Printer, Loader2, Search, Filter, QrCodeIcon, User as UserIcon, Package } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -29,13 +27,11 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
   const [allBatches, setAllBatches] = useState<QRBatch[]>(initialBatches);
   const [usersMap, setUsersMap] = useState<Map<string, User>>(new Map());
 
-
   useEffect(() => {
     const map = new Map<string, User>();
     initialUsers.forEach(user => map.set(user.id, user));
     setUsersMap(map);
   }, [initialUsers]);
-
 
   useEffect(() => {
     const processQrs = async () => {
@@ -55,10 +51,9 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
     processQrs();
   }, [initialQrs, allBatches, usersMap]);
 
-
   const filteredQrs = qrs.filter(qr => {
     const searchMatch =
-      qr.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) || // Convert number to string
+      qr.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
       qr.uniqueId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (qr.ownerEmail && qr.ownerEmail.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (qr.batchName && qr.batchName.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -69,102 +64,180 @@ export function QrCodeTable({ initialQrs, initialBatches, initialUsers }: { init
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-10">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="flex justify-center items-center py-20">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading QR codes...</p>
+        </div>
       </div>
     );
   }
   
   return (
-    <Card className="w-full shadow-lg">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2"><QrCodeIcon />All QR Codes</CardTitle>
-        <CardDescription>View and manage all generated QR codes in the system.</CardDescription>
-        <div className="mt-4 flex flex-col sm:flex-row gap-2">
-          <div className="relative flex-grow">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+    <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <QrCodeIcon className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              All QR Codes
+            </CardTitle>
+            <CardDescription className="text-gray-600">
+              View and manage all generated QR codes in the system
+            </CardDescription>
+          </div>
+        </div>
+        
+        {/* Filters */}
+        <div className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
               type="search"
               placeholder="Search QR ID, User Email, Batch..."
-              className="pl-8 w-full"
+              className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="Unclaimed">Unclaimed</SelectItem>
-              <SelectItem value="Claimed">Claimed</SelectItem>
-              <SelectItem value="Deleted">Deleted</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={batchFilter.toString()} onValueChange={(value) => setBatchFilter(value === 'all' ? 'all' : parseInt(value))}>
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Filter by Batch" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Batches</SelectItem>
-              {allBatches.map(batch => (
-                <SelectItem key={batch.id} value={batch.id.toString()}>{batch.batchName}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80">
+                <SelectValue placeholder="Filter by Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="Unclaimed">Unclaimed</SelectItem>
+                <SelectItem value="Claimed">Claimed</SelectItem>
+                <SelectItem value="Deleted">Deleted</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={batchFilter.toString()} onValueChange={(value) => setBatchFilter(value === 'all' ? 'all' : parseInt(value))}>
+              <SelectTrigger className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl bg-white/80">
+                <SelectValue placeholder="Filter by Batch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Batches</SelectItem>
+                {allBatches.map(batch => (
+                  <SelectItem key={batch.id} value={batch.id.toString()}>{batch.batchName}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
-        {filteredQrs.length === 0 && !isLoading ? (
-          <div className="text-center py-10">
-            <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-lg font-medium">No QR Codes Found</p>
-            <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+      
+      <CardContent className="p-0">
+        {filteredQrs.length === 0 ? (
+          <div className="text-center py-20">
+            <Filter className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-xl font-medium text-gray-900 mb-2">No QR Codes Found</p>
+            <p className="text-gray-600">Try adjusting your search or filters.</p>
           </div>
         ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>QR ID</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>User</TableHead>
-              <TableHead>Batch</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredQrs.map((qr) => (
-              <TableRow key={qr.id}>
-                <TableCell className="font-mono">{qr.id}</TableCell>
-                <TableCell>
-                  <Badge 
-                    variant={
-                      qr.status === 'Claimed' ? 'default' : 
-                      qr.status === 'Unclaimed' ? 'secondary' : 
-                      'destructive'
-                    }
-                  >
-                    {qr.status.charAt(0).toUpperCase() + qr.status.slice(1)}
-                  </Badge>
-                </TableCell>
-                <TableCell>{qr.ownerEmail || 'N/A'}</TableCell>
-                <TableCell>{qr.batchName || qr.batchId}</TableCell>
-                <TableCell>{format(new Date(qr.createdAt), 'MMM dd, yyyy HH:mm')}</TableCell>
-                <TableCell className="text-right">
-                  {qr.status !== 'Deleted' && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/admin/print/qr/${qr.id}`}>
-                        <Printer className="h-4 w-4 mr-1" /> Print
-                      </Link>
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+          <>
+            {/* Mobile view */}
+            <div className="block sm:hidden">
+              {filteredQrs.map((qr) => (
+                <div key={qr.id} className="p-4 border-b border-gray-100 last:border-b-0">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 font-mono">QR {qr.id}</h3>
+                        <p className="text-sm text-gray-600">{qr.batchName || qr.batchId}</p>
+                      </div>
+                      <Badge 
+                        variant={
+                          qr.status === 'Claimed' ? 'default' : 
+                          qr.status === 'Unclaimed' ? 'secondary' : 
+                          'destructive'
+                        }
+                        className="text-xs"
+                      >
+                        {qr.status}
+                      </Badge>
+                    </div>
+                    
+                    {qr.ownerEmail && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <UserIcon className="h-4 w-4" />
+                        {qr.ownerEmail}
+                      </div>
+                    )}
+                    
+                    <div className="text-xs text-gray-500">
+                      {format(new Date(qr.createdAt), 'MMM dd, yyyy HH:mm')}
+                    </div>
+                    
+                    {qr.status !== 'Deleted' && (
+                      <Button variant="outline" size="sm" asChild className="w-full">
+                        <Link href={`/admin/print/qr/${qr.id}`} className="flex items-center justify-center gap-2">
+                          <Printer className="h-4 w-4" />
+                          Print
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop view */}
+            <div className="hidden sm:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50/50">
+                    <TableHead className="font-semibold text-gray-700">QR ID</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Status</TableHead>
+                    <TableHead className="font-semibold text-gray-700">User</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Batch</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Created At</TableHead>
+                    <TableHead className="text-right font-semibold text-gray-700">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredQrs.map((qr) => (
+                    <TableRow key={qr.id} className="hover:bg-blue-50/50 transition-colors">
+                      <TableCell className="font-mono font-medium text-gray-900">{qr.id}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={
+                            qr.status === 'Claimed' ? 'default' : 
+                            qr.status === 'Unclaimed' ? 'secondary' : 
+                            'destructive'
+                          }
+                        >
+                          {qr.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-gray-600">{qr.ownerEmail || 'N/A'}</TableCell>
+                      <TableCell className="text-gray-600">{qr.batchName || qr.batchId}</TableCell>
+                      <TableCell className="text-gray-600">{format(new Date(qr.createdAt), 'MMM dd, yyyy HH:mm')}</TableCell>
+                      <TableCell className="text-right">
+                        {qr.status !== 'Deleted' && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            asChild 
+                            className="hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-colors"
+                          >
+                            <Link href={`/admin/print/qr/${qr.id}`} className="flex items-center gap-2">
+                              <Printer className="h-4 w-4" />
+                              Print
+                            </Link>
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>
